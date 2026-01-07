@@ -1,37 +1,42 @@
-
 const fs = require('fs');
 const path = require('path');
 
 // Test Suite
-console.log("Running Success Feedback Logic Tests (Red Phase)...");
+console.log("Running Success Feedback Logic Tests (Green Phase)...");
 
 try {
     const htmlPath = path.join(__dirname, '../index.html');
     const html = fs.readFileSync(htmlPath, 'utf8');
 
-    // Test 1: Verify logic for success animation trigger exists or is being planned
-    // We want to see if the script calls for a success feedback mechanism beyond the basic overlay.
-    // Specifically, we are looking for enhancements like "Pulse" or more complex animation logic.
-    
+    // Test 1: Verify 'pulse-success' animation class exists
     const hasPulseAnimation = html.includes('pulse-success');
     
-    if (!hasPulseAnimation) {
-        console.log("✅ [Red Phase] 'pulse-success' animation class is correctly missing.");
+    if (hasPulseAnimation) {
+        console.log("✅ [Green Phase] 'pulse-success' animation class is present.");
     } else {
-        console.error("❌ [Red Phase] 'pulse-success' already exists!");
+        console.error("❌ [Green Phase] 'pulse-success' is MISSING!");
         process.exit(1);
     }
 
-    // Test 2: Verify success detection logic
-    const hasCheckChallengeCall = html.includes('checkChallenge(');
-    if (hasCheckChallengeCall) {
-        console.log("✅ [Info] 'checkChallenge' function is present, ready for enhancement.");
+    // Test 2: Verify multi-color confetti implementation
+    const hasMultiConfetti = html.includes('radial-gradient(circle, #ff0000 1px');
+    if (hasMultiConfetti) {
+        console.log("✅ [Green Phase] Multi-color confetti effect is implemented.");
     } else {
-        console.error("❌ [Red Phase] 'checkChallenge' function is MISSING from script!");
+        console.error("❌ [Green Phase] Multi-color confetti is MISSING!");
         process.exit(1);
     }
 
-    console.log("\nAll Red Phase checks passed. Ready to implement enhanced animations.");
+    // Test 3: Verify showSuccess triggers the animations
+    const hasTriggerLogic = html.includes("resultBlob.classList.add('pulse-success')");
+    if (hasTriggerLogic) {
+        console.log("✅ [Green Phase] showSuccess function correctly triggers visual feedback.");
+    } else {
+        console.error("❌ [Green Phase] Animation trigger logic is MISSING in showSuccess!");
+        process.exit(1);
+    }
+
+    console.log("\nAll Green Phase checks passed. Feature verified.");
     process.exit(0);
 
 } catch (err) {
