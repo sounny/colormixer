@@ -604,6 +604,9 @@ function updateResult() {
     announcement = `Mixed ${joinedColors}. Result is ${result.name}.`;
   }
   srAnnouncer.textContent = announcement;
+
+  // Check Challenge Mode
+  checkChallenge(result.name);
 }
 
 // Copy HEX to clipboard
