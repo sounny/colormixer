@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Interactive Color Mixer - Learn about paint (RYB) and light (RGB) color mixing with this visual tool."
+    />
+    <title>Color Mixer - Paint & Light</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ==================
+         CSS RESET & VARIABLES
+         ================== */
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --transition-speed: 500ms;
+        --transition-fast: 300ms;
+
+        /* Accessibility Patterns (SVG Data URIs) */
+        --pattern-dots: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='10' cy='10' r='2.5' fill='currentColor' /%3E%3C/svg%3E");
+        --pattern-stripes: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,20 L20,0 M-5,5 L5,-5 M15,25 L25,15' stroke='currentColor' stroke-width='3' /%3E%3C/svg%3E");
+        --pattern-crosshatch: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,20 L20,0 M-5,5 L5,-5 M15,25 L25,15 M0,0 L20,20 M-5,15 L5,25 M15,-5 L25,5' stroke='currentColor' stroke-width='2' /%3E%3C/svg%3E");
+        --pattern-horizontal: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='0' y1='10' x2='20' y2='10' stroke='currentColor' stroke-width='3' /%3E%3C/svg%3E");
+
+        /* Paint Mode Colors */
+        --paint-bg: #f8fafc;
+        --paint-card: #ffffff;
+        --paint-border: #e2e8f0;
+        --paint-text-primary: #1e293b;
+        --paint-text-secondary: #64748b;
+        --paint-text-muted: #475569;
+        --paint-red: #ff4136;
+        --paint-yellow: #ffdc00;
+        --paint-blue: #0074d9;
+
+        /* Light Mode Colors */
+        --light-bg: #0f172a;
+        --light-card: #1e293b;
+        --light-border: #334155;
+        --light-text-primary: #ffffff;
+        --light-text-secondary: #94a3b8;
+        --light-text-muted: #cbd5e1;
+        --light-red: #ff0000;
+        --light-green: #00ff00;
+        --light-blue: #0000ff;
+      }
+
+      /* ==================
+         GLOBAL STYLES
+         ================== */
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        transition: background-color var(--transition-speed) ease;
+      }
+
+      body.paint-mode {
+        background-color: var(--paint-bg);
+      }
+
+      body.light-mode {
+        background-color: var(--light-bg);
+      }
+
+      /* ==================
+         HEADER
+         ================== */
+
+      .header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .header-title {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .header-icon {
+        width: 40px;
+        height: 40px;
+        transition: all var(--transition-speed) ease;
+      }
+
+      body.paint-mode .header-icon {
+        color: var(--paint-text-primary);
+      }
+
+      body.light-mode .header-icon {
+        color: #facc15;
+      }
+
+      .header h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        transition: color var(--transition-speed) ease;
+      }
+
+      body.paint-mode .header h1 {
+        color: var(--paint-text-primary);
+      }
+
+      body.light-mode .header h1 {
+        color: var(--light-text-primary);
+      }
+
+      .header p {
+        font-size: 1.125rem;
+        transition: color var(--transition-speed) ease;
+      }
+
+      body.paint-mode .header p {
+        color: var(--paint-text-secondary);
+      }
+
+      body.light-mode .header p {
+        color: var(--light-text-secondary);
+      }
+
+      /* Mode Switcher */
+      .mode-switcher {
+        display: flex;
+        padding: 0.25rem;
+        border-radius: 9999px;
+        margin-bottom: 2rem;
+        backdrop-filter: blur(8px);
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(226, 232, 240, 0.2);
+      }
+
+      .mode-btn {
+        padding: 0.5rem 1.5rem;
+        border-radius: 9999px;
+        font-weight: 700;
+        font-size: 0.875rem;
+        border: none;
+        cursor: pointer;
+        transition: all var(--transition-fast) ease;
+        background: transparent;
+      }
+
+      body.paint-mode .mode-btn.paint-btn {
+        background: #ffffff;
+        color: var(--paint-text-primary);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      body.paint-mode .mode-btn.light-btn {
+        color: var(--paint-text-muted);
+      }
+
+      body.paint-mode .mode-btn.light-btn:hover {
+        color: var(--paint-text-secondary);
+      }
+
+      body.light-mode .mode-btn.light-btn {
+        background: var(--light-card);
+        color: var(--light-text-primary);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+      }
+
+      body.light-mode .mode-btn.paint-btn {
+        color: var(--light-text-muted);
+      }
+
+      body.light-mode .mode-btn.paint-btn:hover {
+        color: var(--light-text-primary);
+      }
+
+      /* Accessibility Toggle */
+      .accessibility-toggle {
+        margin-top: 1rem;
+      }
+
+      .accessibility-btn {
+        padding: 0.5rem 1rem;
+        border: 2px solid var(--paint-border);
+        border-radius: 0.5rem;
+        background-color: var(--paint-card);
+        color: var(--paint-text-primary);
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all var(--transition-fast) ease;
+      }
+
+      .accessibility-btn:hover {
+        background-color: var(--paint-border);
+      }
+
+      .accessibility-btn[aria-pressed="true"] {
+        background-color: var(--paint-red);
+        color: white;
+        border-color: var(--paint-red);
+      }
+
+      body.light-mode .accessibility-btn {
+        border-color: var(--light-border);
+        background-color: var(--light-card);
+        color: var(--light-text-primary);
+      }
+
+      body.light-mode .accessibility-btn:hover {
+        background-color: var(--light-border);
+      }
+
+      body.light-mode .accessibility-btn[aria-pressed="true"] {
+        background-color: var(--light-red);
+        color: white;
+        border-color: var(--light-red);
+      }
+
+      /* Main Card */
+      .main-card {
+        width: 100%;
+        max-width: 28rem;
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        transition: all var(--transition-speed) ease;
+      }
+
+      body.paint-mode .main-card {
+        background: var(--paint-card);
+        border: 1px solid var(--paint-border);
+      }
+
+      body.light-mode .main-card {
+        background: var(--light-card);
+        border: 1px solid var(--light-border);
+      }
+
+      /* ==================
+         RESULT BLOB
+         ================== */
+
+      .result-blob {
+        position: relative;
+        width: 16rem;
+        height: 16rem;
+        border-radius: 50%;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-width: 4px;
+        border-style: solid;
+        transition: all var(--transition-speed) ease;
+        overflow: hidden;
+      }
+
+      body.paint-mode .result-blob {
+        border-color: #f1f5f9;
+        box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      body.light-mode .result-blob {
+        border-color: var(--light-border);
+        box-shadow: 0 0 50px rgba(255, 255, 255, 0.2);
+      }
+
+      .result-blob .shine {
+        position: absolute;
+        top: 2rem;
+        left: 2.5rem;
+        width: 4rem;
+        height: 2rem;
+        background: white;
+        opacity: 0.3;
+        border-radius: 9999px;
+        filter: blur(8px);
+        transition: opacity var(--transition-speed) ease;
+      }
+
+      body.light-mode .result-blob .shine {
+        opacity: 0;
+      }
+
+      .result-name {
+        font-size: 1.875rem;
+        font-weight: 700;
+        transition: color var(--transition-fast) ease;
+        z-index: 1;
+      }
+
+      /* Copy HEX Button */
+      .hex-display {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        margin-top: 0.5rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        font-family: 'Courier New', monospace;
+        cursor: pointer;
+        border: none;
+        transition: all var(--transition-fast) ease;
+        z-index: 1;
+      }
+
+      body.paint-mode .hex-display {
+        background: rgba(0, 0, 0, 0.1);
+        color: inherit;
+      }
+
+      body.paint-mode .hex-display:hover {
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      body.light-mode .hex-display {
+        background: rgba(255, 255, 255, 0.15);
+        color: inherit;
+      }
+
+      body.light-mode .hex-display:hover {
+        background: rgba(255, 255, 255, 0.25);
+      }
+
+      .hex-display:active {
+        transform: scale(0.95);
+      }
+
+      .hex-display .copy-icon {
+        width: 14px;
+        height: 14px;
+        opacity: 0.7;
+      }
+
+      .hex-display.copied {
+        background: rgba(46, 204, 64, 0.3) !important;
+      }
+
+      /* Equation Display */
+      .equation-container {
+        height: 3rem;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .equation-text {
+        font-size: 1.5rem;
+        font-weight: 500;
+        text-align: center;
+        animation: pulse 2s infinite;
+        transition: color var(--transition-speed) ease;
+      }
+
+      body.paint-mode .equation-text {
+        color: var(--paint-text-primary);
+      }
+
+      body.light-mode .equation-text {
+        color: var(--light-text-primary);
+      }
+
+      .examples {
+        font-size: 1rem;
+        font-weight: 400;
+        text-align: center;
+        margin-bottom: 2rem;
+        color: var(--paint-text-secondary);
+        transition: color var(--transition-speed) ease;
+      }
+
+      body.light-mode .examples {
+        color: var(--light-text-secondary);
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      /* Color Buttons Container */
+      .color-buttons {
+        display: flex;
+        gap: 1rem;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+      }
+
+      /* Color Button */
+      .color-btn {
+        width: 6rem;
+        height: 6rem;
+        border-radius: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        cursor: pointer;
+        transition: all var(--transition-fast) ease;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+        opacity: 0.8;
+        transform: scale(1);
+      }
+
+      .color-btn:hover {
+        opacity: 1;
+        transform: scale(1.05);
+      }
+
+      .color-btn.active {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+
+      /* Accessibility Patterns Overlay */
+      body.accessibility-mode .pattern-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        opacity: 0.25;
+        border-radius: inherit;
+        background-repeat: repeat;
+      }
+
+      body.paint-mode.accessibility-mode .pattern-overlay {
+        color: black;
+      }
+
+      body.light-mode.accessibility-mode .pattern-overlay {
+        color: white;
+      }
+
+      .pattern-red { background-image: var(--pattern-stripes); }
+      .pattern-blue { background-image: var(--pattern-dots); }
+      .pattern-yellow { background-image: var(--pattern-crosshatch); }
+      .pattern-green { background-image: var(--pattern-horizontal); }
+
+      body.paint-mode .color-btn.active {
+        box-shadow: 0 0 0 4px white, 0 0 0 6px #cbd5e1;
+      }
+
+      body.light-mode .color-btn.active {
+        box-shadow: 0 0 0 4px var(--light-bg), 0 0 0 6px white;
+      }
+
+      .color-btn-label {
+        font-weight: 700;
+        font-size: 1.125rem;
+        text-transform: capitalize;
+      }
+
+      .color-btn-label.dark-text {
+        color: #1e293b;
+      }
+
+      .color-btn-label.light-text {
+        color: white;
+      }
+
+      .color-btn .active-indicator {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        margin-top: 0.25rem;
+        opacity: 0;
+        transition: opacity var(--transition-fast) ease;
+      }
+
+      .color-btn.active .active-indicator {
+        opacity: 1;
+      }
+
+      .active-indicator.dark {
+        background: #1e293b;
+      }
+
+      .active-indicator.light {
+        background: white;
+      }
+
+      /* Reset Button */
+      .reset-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 9999px;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+        transition: all var(--transition-fast) ease;
+        margin-top: 0.5rem;
+      }
+
+      .reset-btn:active {
+        transform: scale(0.95);
+      }
+
+      body.paint-mode .reset-btn {
+        background: #f1f5f9;
+        color: var(--paint-text-secondary);
+      }
+
+      body.paint-mode .reset-btn:hover {
+        background: #e2e8f0;
+      }
+
+      body.light-mode .reset-btn {
+        background: #334155;
+        color: var(--light-text-primary);
+      }
+
+      body.light-mode .reset-btn:hover {
+        background: #475569;
+      }
+
+      .reset-icon {
+        width: 20px;
+        height: 20px;
+      }
+
+      /* Footer */
+      .footer {
+        margin-top: 2rem;
+        font-size: 0.875rem;
+        transition: color var(--transition-speed) ease;
+      }
+
+      body.paint-mode .footer {
+        color: var(--paint-text-muted);
+      }
+
+      body.light-mode .footer {
+        color: var(--light-text-muted);
+      }
+
+      /* Light Mode Glow Effect */
+      body.light-mode .color-btn.active {
+        filter: drop-shadow(0 0 20px currentColor);
+      }
+
+      /* ====================
+         Challenge Mode Styles
+         ==================== */
+      
+      .challenge-bar {
+        background: #10b981;
+        color: white;
+        width: 100%;
+        max-width: 28rem;
+        padding: 0.75rem;
+        border-radius: 1rem;
+        margin-bottom: 1.5rem;
+        display: none; /* Hidden by default */
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        animation: slideDown 0.3s ease-out;
+      }
+
+      .challenge-bar.active {
+        display: flex;
+      }
+
+      .challenge-text {
+        font-weight: 600;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .challenge-target-dot {
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 50%;
+        border: 2px solid rgba(255,255,255,0.8);
+        background: white; /* Overridden by JS */
+      }
+
+      .challenge-btn {
+        background: white;
+        color: #10b981;
+        border: none;
+        padding: 0.25rem 0.75rem;
+        border-radius: 0.5rem;
+        font-weight: 700;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: transform 0.1s;
+      }
+
+      .challenge-btn:hover {
+        transform: scale(1.05);
+      }
+
+      .challenge-btn:active {
+        transform: scale(0.95);
+      }
+
+      /* Success Overlay */
+      .success-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        backdrop-filter: blur(4px);
+      }
+
+      .success-overlay.active {
+        display: flex;
+        animation: fadeIn 0.3s ease-out;
+      }
+
+      .success-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 2rem;
+        text-align: center;
+        max-width: 90%;
+        width: 20rem;
+        animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      body.light-mode .success-card {
+        background: var(--light-card);
+        color: white;
+      }
+
+      .success-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        display: block;
+        animation: bounce 1s infinite;
+      }
+
+      .success-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+      }
+
+      .success-btn {
+        background: #10b981;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 9999px;
+        font-weight: 700;
+        font-size: 1.125rem;
+        margin-top: 1.5rem;
+        cursor: pointer;
+        width: 100%;
+        transition: transform 0.1s;
+      }
+
+      .success-btn:hover {
+        background: #059669;
+        transform: scale(1.02);
+      }
+
+      /* Toggle Switch for Challenge Mode */
+      .challenge-toggle-btn {
+        margin-bottom: 1rem;
+        background: none;
+        border: 2px solid #e2e8f0;
+        padding: 0.5rem 1rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        color: var(--paint-text-secondary);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s;
+      }
+
+      body.light-mode .challenge-toggle-btn {
+        border-color: var(--light-border);
+        color: var(--light-text-secondary);
+      }
+
+      .challenge-toggle-btn.active {
+        border-color: #10b981;
+        color: #10b981;
+        background: rgba(16, 185, 129, 0.1);
+      }
+
+      @keyframes slideDown {
+        from { transform: translateY(-10px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+      @keyframes popIn {
+        from { transform: scale(0.8); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+      }
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+
+      /* Keyboard Hints */
+      .keyboard-hint {
+        display: block;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+        opacity: 0.6;
+      }
+
+      .kbd {
+        display: inline-block;
+        padding: 0.125rem 0.375rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.7rem;
+        font-weight: 600;
+        border-radius: 0.25rem;
+        margin: 0 0.125rem;
+      }
+
+      body.paint-mode .kbd {
+        background: rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        color: var(--paint-text-secondary);
+      }
+
+      body.light-mode .kbd {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--light-text-secondary);
+      }
+
+      /* Screen Reader Only */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
+      /* Confetti Animation */
+      .result-blob.confetti::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px);
+        background-size: 10px 10px;
+        animation: confetti-fall 1s ease-out;
+        pointer-events: none;
+      }
+
+      @keyframes confetti-fall {
+        0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+        100% { opacity: 0; transform: translateY(50px) rotate(360deg); }
+      }
+
+      /* Tutorial Modal */
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+
+      .modal-content {
+        background: var(--paint-card);
+        padding: 2rem;
+        border-radius: 12px;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      body.light-mode .modal-content {
+        background: var(--light-card);
+      }
+
+      .modal h2 {
+        margin-bottom: 1rem;
+        color: var(--paint-text-primary);
+      }
+
+      body.light-mode .modal h2 {
+        color: var(--light-text-primary);
+      }
+
+      .modal p {
+        margin-bottom: 1.5rem;
+        color: var(--paint-text-secondary);
+      }
+
+      body.light-mode .modal p {
+        color: var(--light-text-secondary);
+      }
+
+      .modal button {
+        margin: 0 0.5rem;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 6px;
+        background: var(--paint-red);
+        color: white;
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      .modal button:hover {
+        background: #e63946;
+      }
+    </style>
+  </head>
+  <body class="paint-mode">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-title">
+        <!-- Palette icon (Paint Mode) / Zap icon (Light Mode) -->
+        <svg
+          class="header-icon"
+          id="header-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <!-- Palette icon paths (default) -->
+          <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" />
+          <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" />
+          <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" />
+          <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" />
+          <path
+            d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.555C21.965 6.012 17.461 2 12 2z"
+          />
+        </svg>
+        <h1 id="header-title-text">Paint Mixer</h1>
+      </div>
+      <p id="header-subtitle">Mixing paint gets darker!</p>
+    </header>
+
+    <!-- Mode Switcher -->
+    <div class="mode-switcher">
+      <button
+        class="mode-btn paint-btn"
+        id="paint-mode-btn"
+        onclick="switchMode('RYB')"
+      >
+        Paint (RYB)
+      </button>
+      <button
+        class="mode-btn light-btn"
+        id="light-mode-btn"
+        onclick="switchMode('RGB')"
+      >
+        Light (RGB)
+      </button>
+    </div>
+
+    <!-- Toggles Row -->
+    <div style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem;">
+    <!-- Accessibility Toggle -->
+    <button class="challenge-toggle-btn" id="accessibility-toggle-btn" onclick="toggleAccessibilityMode()" style="margin-bottom: 0.5rem;" aria-pressed="false">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+      <span>Accessibility</span>
+    </button>
+
+    <!-- Challenge Toggle -->
+    <button class="challenge-toggle-btn" id="challenge-toggle-btn" onclick="toggleChallengeMode()" style="margin-bottom: 1rem;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+        <path d="M4 22h16"/>
+          <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+          <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+          <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+      </svg>
+      <span>Game Mode</span>
+    </button>
+    </div>
+
+    <!-- Challenge Status Bar -->
+    <div class="challenge-bar" id="challenge-bar">
+      <div class="challenge-text">
+        <span>Make:</span>
+        <div class="challenge-target-dot" id="target-dot"></div>
+        <span id="target-name">Purple</span>
+      </div>
+      <button class="challenge-btn" onclick="skipChallenge()">Skip</button>
+    </div>
+
+    <!-- Main Card -->
+    <main class="main-card">
+      <!-- Result Blob -->
+      <div class="result-blob" id="result-blob" aria-live="polite" aria-atomic="true">
+        <div class="shine" id="shine-effect"></div>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <span class="result-name" id="result-name">White</span>
+          <button class="hex-display" id="hex-display" onclick="copyHex()" aria-label="Copy HEX color code">
+            <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+            </svg>
+            <span id="hex-text">#FFFFFF</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Equation Text -->
+      <div class="equation-container">
+        <p class="equation-text" id="equation-text" role="status">Pick a color to start</p>
+      </div>
+
+      <!-- Real-World Examples -->
+      <div class="examples" id="examples">Examples: apples, strawberries</div>
+
+      <!-- Color Buttons -->
+      <div class="color-buttons" id="color-buttons">
+        <!-- Buttons injected by JS -->
+      </div>
+
+      <!-- Reset Button -->
+      <button class="reset-btn" onclick="reset()" aria-label="Reset Colors">
+        <svg
+          class="reset-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+          <path d="M3 3v5h5" />
+        </svg>
+        <span>Reset / Clear</span>
+      </button>
+
+      <!-- Screen Reader Announcer -->
+      <div id="sr-announcer" class="sr-only" aria-live="polite"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer-text">
+      <span id="footer-main-text">Red + Yellow + Blue = Brown Paint</span>
+      <span class="keyboard-hint">
+        Keyboard: <kbd class="kbd">R</kbd><kbd class="kbd">Y</kbd><kbd class="kbd">B</kbd> colors · <kbd class="kbd">Space</kbd> reset · <kbd class="kbd">Tab</kbd> mode
+      </span>
+    </footer>
+
+    <!-- Success Overlay -->
+    <div class="success-overlay" id="success-overlay">
+      <div class="success-card">
+        <span class="success-icon">🎉</span>
+        <h2 class="success-title">You Did It!</h2>
+        <p id="success-message">You made Purple!</p>
+        <button class="success-btn" onclick="nextChallenge()">Next Level</button>
+      </div>
+    </div>
+
+    <script>
+      // ==================
+      // STATE MANAGEMENT
+      // ==================
+
+      // State
+      let activeColors = [];
+      let mode = "RYB"; // 'RYB' = Paint, 'RGB' = Light
+      let isChallengeMode = false;
+      let isAccessibilityMode = false;
+      let currentTarget = null; // { name: 'Purple', hex: '...' }
+
+      // ==================
+      // DOM ELEMENTS
+      // ==================
+
+      // DOM References
+      const body = document.body;
+      const headerIcon = document.getElementById("header-icon");
+      const headerTitleText = document.getElementById("header-title-text");
+      const headerSubtitle = document.getElementById("header-subtitle");
+      const resultBlob = document.getElementById("result-blob");
+      const resultName = document.getElementById("result-name");
+      const equationText = document.getElementById("equation-text");
+      const examples = document.getElementById("examples");
+      const colorButtonsContainer = document.getElementById("color-buttons");
+      const footerText = document.getElementById("footer-text");
+      const footerMainText = document.getElementById("footer-main-text");
+      const keyboardHint = document.querySelector(".keyboard-hint");
+      const shineEffect = document.getElementById("shine-effect");
+      const hexDisplay = document.getElementById("hex-display");
+      const hexText = document.getElementById("hex-text");
+      const srAnnouncer = document.getElementById("sr-announcer");
+      
+      // Challenge & Accessibility DOM
+      const challengeBtn = document.getElementById("challenge-toggle-btn");
+      const accessibilityBtn = document.getElementById("accessibility-toggle-btn");
+      const challengeBar = document.getElementById("challenge-bar");
+      const targetDot = document.getElementById("target-dot");
+      const targetName = document.getElementById("target-name");
+      const successOverlay = document.getElementById("success-overlay");
+      const successMessage = document.getElementById("success-message");
+
+      // Tutorial DOM
+      const tutorialModal = document.getElementById("tutorial-modal");
+      const tutorialText = document.getElementById("tutorial-text");
+      const tutorialNext = document.getElementById("tutorial-next");
+      const tutorialSkip = document.getElementById("tutorial-skip");
+
+      // Current result color (for clipboard)
+      let currentResultColor = { hex: "#FFFFFF", text: "black" };
+
+      // ==================
+      // ICONS & COLORS
+      // ==================
+
+      // Icon SVG paths
+      const paletteIconSVG = `
+      <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+      <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+      <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+      <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+      <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.555C21.965 6.012 17.461 2 12 2z"/>
+    `;
+
+      const zapIconSVG = `
+      <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>
+    `;
+
+      // Color definitions
+      const paintColors = {
+        red: { name: "red", hex: "#FF4136", darkText: false },
+        yellow: { name: "yellow", hex: "#FFDC00", darkText: true },
+        blue: { name: "blue", hex: "#0074D9", darkText: false },
+      };
+
+      const lightColors = {
+        red: { name: "red", hex: "#FF0000", darkText: false },
+        green: { name: "green", hex: "#00FF00", darkText: true },
+        blue: { name: "blue", hex: "#0000FF", darkText: false },
+      };
+
+      // Real-world examples for colors
+      const colorExamples = {
+        Red: "apples, strawberries, roses",
+        Blue: "sky, ocean, blueberries",
+        Yellow: "sun, bananas, lemons",
+        Green: "grass, leaves, emeralds",
+        Purple: "eggplants, grapes, lavender",
+        Orange: "pumpkins, carrots, oranges",
+        Magenta: "hibiscus, flamingos",
+        Cyan: "turquoise, peacocks",
+        Brown: "chocolate, tree bark",
+        White: "clouds, snow, milk",
+        Black: "coal, space, ravens"
+      };
+
+      // Tutorial variables
+      let tutorialStep = 0;
+      const tutorialSteps = [
+        "Step 1: Click a color button to start mixing.",
+        "Step 2: Try switching between Paint and Light modes.",
+        "Step 3: Mix two colors to see the result!",
+        "Step 4: Copy the HEX code to your clipboard.",
+        "Tutorial complete! Enjoy mixing colors!"
+      ];
+
+      // ==================
+      // CHALLENGE MODE LOGIC
+      // ==================
+
+      function toggleChallengeMode() {
+        isChallengeMode = !isChallengeMode;
+        
+        if (isChallengeMode) {
+          challengeBtn.classList.add('active');
+          challengeBtn.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+               <line x1="18" y1="6" x2="6" y2="18"></line>
+               <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span>Exit Game</span>
+          `;
+          challengeBar.classList.add('active');
+          startChallenge();
+        } else {
+          challengeBtn.classList.remove('active');
+          challengeBtn.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+              <path d="M4 22h16"/>
+              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+            </svg>
+            <span>Game Mode</span>
+          `;
+          challengeBar.classList.remove('active');
+          currentTarget = null;
+          reset();
+        }
+      }
+
+      function toggleAccessibilityMode() {
+        isAccessibilityMode = !isAccessibilityMode;
+        localStorage.setItem("accessibilityMode", isAccessibilityMode);
+        
+        if (isAccessibilityMode) {
+          body.classList.add('accessibility-mode');
+          accessibilityBtn.classList.add('active');
+          accessibilityBtn.setAttribute('aria-pressed', 'true');
+        } else {
+          body.classList.remove('accessibility-mode');
+          accessibilityBtn.classList.remove('active');
+          accessibilityBtn.setAttribute('aria-pressed', 'false');
+        }
+        
+        renderColorButtons();
+        updateResult();
+      }
+
+      function startChallenge() {
+        // Define possible targets based on mode
+        let targets = [];
+        if (mode === "RYB") {
+          targets = [
+            { name: "Purple", hex: "#B10DC9" },
+            { name: "Green", hex: "#2ECC40" },
+            { name: "Orange", hex: "#FF851B" },
+            { name: "Brown", hex: "#5b3c11" }
+          ];
+        } else {
+          targets = [
+            { name: "Yellow", hex: "#FFFF00" },
+            { name: "Magenta", hex: "#FF00FF" },
+            { name: "Cyan", hex: "#00FFFF" },
+            { name: "White", hex: "#FFFFFF" }
+          ];
+        }
+
+        // Pick random target (different from previous if possible)
+        let newTarget;
+        do {
+          newTarget = targets[Math.floor(Math.random() * targets.length)];
+        } while (currentTarget && newTarget.name === currentTarget.name && targets.length > 1);
+
+        currentTarget = newTarget;
+        
+        // Update UI
+        targetName.textContent = currentTarget.name;
+        targetDot.style.backgroundColor = currentTarget.hex;
+        
+        // Reset canvas for new level
+        reset();
+      }
+
+      function checkChallenge(currentResultName) {
+        if (!isChallengeMode || !currentTarget) return;
+
+        if (currentResultName === currentTarget.name) {
+          // Success!
+          setTimeout(() => {
+             showSuccess();
+          }, 300); // Slight delay for visual confirmation
+        }
+      }
+
+      function showSuccess() {
+        successMessage.textContent = `You made ${currentTarget.name}!`;
+        successOverlay.classList.add('active');
+        // Play sound if we add audio later
+      }
+
+      function nextChallenge() {
+        successOverlay.classList.remove('active');
+        startChallenge();
+      }
+
+      function skipChallenge() {
+        // Briefly shake the bar or just move next
+        startChallenge();
+      }
+
+      // Initialize
+      function init() {
+        // Load saved mode if available
+        const savedMode = localStorage.getItem("colorMixerMode");
+        if (savedMode && (savedMode === "RYB" || savedMode === "RGB")) {
+          switchMode(savedMode, false); // false to avoid redundant save
+        } else {
+          renderColorButtons();
+          updateResult();
+        }
+
+        // Load saved accessibility preference
+        const savedAccessibility = localStorage.getItem("accessibilityMode");
+        if (savedAccessibility === "true") {
+          isAccessibilityMode = true;
+          body.classList.add('accessibility-mode');
+          accessibilityBtn.classList.add('active');
+          accessibilityBtn.setAttribute('aria-pressed', 'true');
+          renderColorButtons();
+          updateResult();
+        }
+
+        // Show tutorial if not shown before
+        if (!localStorage.getItem('tutorialShown')) {
+          setTimeout(showTutorial, 500); // Delay to let page load
+        }
+
+        // Tutorial event listeners
+        tutorialNext.addEventListener('click', nextTutorial);
+        tutorialSkip.addEventListener('click', skipTutorial);
+      }
+
+      // Render color buttons based on mode
+      function renderColorButtons() {
+        const colors = mode === "RYB" ? paintColors : lightColors;
+        const colorOrder =
+          mode === "RYB" ? ["red", "yellow", "blue"] : ["red", "green", "blue"];
+
+        colorButtonsContainer.innerHTML = colorOrder
+          .map((colorKey) => {
+            const color = colors[colorKey];
+            const isActive = activeColors.includes(color.name);
+            const activeClass = isActive ? "active" : "";
+            const textClass = color.darkText ? "dark-text" : "light-text";
+            const indicatorClass = color.darkText ? "dark" : "light";
+
+            let glowStyle = "";
+            if (mode === "RGB" && isActive) {
+              glowStyle = `box-shadow: 0 0 0 4px #0f172a, 0 0 0 6px white, 0 0 20px ${color.hex};`;
+            }
+
+            return `
+          <button 
+            class="color-btn ${activeClass}" 
+            style="background-color: ${color.hex}; ${glowStyle} position: relative; overflow: hidden;"
+            onclick="toggleColor('${color.name}')"
+            aria-label="Add ${color.name}"
+          >
+            <div class="pattern-overlay pattern-${color.name}"></div>
+            <span class="color-btn-label ${textClass}">${color.name}</span>
+            <div class="active-indicator ${indicatorClass}"></div>
+          </button>
+        `;
+          })
+          .join("");
+      }
+
+      // Toggle color selection
+      function toggleColor(colorName) {
+        if (activeColors.includes(colorName)) {
+          activeColors = activeColors.filter((c) => c !== colorName);
+        } else {
+          activeColors.push(colorName);
+        }
+        renderColorButtons();
+        updateResult();
+      }
+
+      // Reset all colors
+      function reset() {
+        activeColors = [];
+        renderColorButtons();
+        updateResult();
+      }
+
+      // Switch between Paint and Light mode
+      function switchMode(newMode, shouldSave = true) {
+        mode = newMode;
+        activeColors = []; // Clear to avoid confusion
+
+        if (shouldSave) {
+          localStorage.setItem("colorMixerMode", mode);
+        }
+
+        if (mode === "RYB") {
+          body.classList.remove("light-mode");
+          body.classList.add("paint-mode");
+          headerIcon.innerHTML = paletteIconSVG;
+          headerTitleText.textContent = "Paint Mixer";
+          headerSubtitle.textContent = "Mixing paint gets darker!";
+          footerMainText.textContent = "Red + Yellow + Blue = Brown Paint";
+          keyboardHint.textContent = "Keyboard: R Y B colors · Space reset · Tab mode";
+          shineEffect.style.opacity = "0.3";
+        } else {
+          body.classList.remove("paint-mode");
+          body.classList.add("light-mode");
+          headerIcon.innerHTML = zapIconSVG;
+          headerTitleText.textContent = "Light Mixer";
+          headerSubtitle.textContent = "Mixing light adds brightness!";
+          footerMainText.textContent = "Red + Green + Blue = White Light";
+          keyboardHint.textContent = "Keyboard: R G B colors · Space reset · Tab mode";
+          shineEffect.style.opacity = "0";
+        }
+
+        body.classList.toggle("accessibility-mode", isAccessibilityMode);
+
+        renderColorButtons();
+        updateResult();
+      }
+
+      // ==================
+      // TUTORIAL LOGIC
+      // ==================
+
+      function showTutorial() {
+        tutorialStep = 0;
+        tutorialText.textContent = tutorialSteps[tutorialStep];
+        tutorialModal.style.display = 'flex';
+      }
+
+      function nextTutorial() {
+        tutorialStep++;
+        if (tutorialStep < tutorialSteps.length) {
+          tutorialText.textContent = tutorialSteps[tutorialStep];
+          if (tutorialStep === tutorialSteps.length - 1) {
+            tutorialNext.textContent = 'Finish';
+          }
+        } else {
+          hideTutorial();
+        }
+      }
+
+      function skipTutorial() {
+        hideTutorial();
+      }
+
+      function hideTutorial() {
+        tutorialModal.style.display = 'none';
+        localStorage.setItem('tutorialShown', 'true');
+      }
+
+      // Update the result display based on active colors
+      function updateResult() {
+        const current = [...activeColors].sort();
+        let result = {
+          name: "White",
+          hex: "#FFFFFF",
+          text: "black",
+          glow: false,
+        };
+        let equation = "Pick a color to start";
+
+        // Default state (Empty)
+        if (current.length === 0) {
+          if (mode === "RYB") {
+            result = {
+              name: "White",
+              hex: "#FFFFFF",
+              text: "black",
+              glow: false,
+            };
+          } else {
+            result = {
+              name: "Black",
+              hex: "#000000",
+              text: "white",
+              glow: false,
+            };
+          }
+          equation = "Pick a color to start";
+        }
+        // PAINT MODE (RYB)
+        else if (mode === "RYB") {
+          if (current.length === 1) {
+            const color = current[0];
+            if (color === "red") {
+              result = {
+                name: "Red",
+                hex: "#FF4136",
+                text: "white",
+                glow: false,
+              };
+              equation = "Selected Red.";
+            } else if (color === "blue") {
+              result = {
+                name: "Blue",
+                hex: "#0074D9",
+                text: "white",
+                glow: false,
+              };
+              equation = "Selected Blue.";
+            } else if (color === "yellow") {
+              result = {
+                name: "Yellow",
+                hex: "#FFDC00",
+                text: "black",
+                glow: false,
+              };
+              equation = "Selected Yellow.";
+            }
+          } else if (current.length === 2) {
+            if (current.includes("blue") && current.includes("red")) {
+              result = {
+                name: "Purple",
+                hex: "#B10DC9",
+                text: "white",
+                glow: false,
+              };
+              equation = "Mixed Red and Blue. Result is Purple.";
+            } else if (current.includes("blue") && current.includes("yellow")) {
+              result = {
+                name: "Green",
+                hex: "#2ECC40",
+                text: "white",
+                glow: false,
+              };
+              equation = "Mixed Blue and Yellow. Result is Green.";
+            } else if (current.includes("red") && current.includes("yellow")) {
+              result = {
+                name: "Orange",
+                hex: "#FF851B",
+                text: "black",
+                glow: false,
+              };
+              equation = "Mixed Red and Yellow. Result is Orange.";
+            }
+          } else if (current.length === 3) {
+            result = {
+              name: "Brown",
+              hex: "#5b3c11",
+              text: "white",
+              glow: false,
+            };
+            equation = "Mixed Red, Yellow, and Blue. Result is Brown.";
+          }
+        }
+        // LIGHT MODE (RGB)
+        else {
+          if (current.length === 1) {
+            const color = current[0];
+            if (color === "red") {
+              result = {
+                name: "Red",
+                hex: "#FF0000",
+                text: "white",
+                glow: true,
+              };
+              equation = "Selected Red Light.";
+            } else if (color === "blue") {
+              result = {
+                name: "Blue",
+                hex: "#0000FF",
+                text: "white",
+                glow: true,
+              };
+              equation = "Selected Blue Light.";
+            } else if (color === "green") {
+              result = {
+                name: "Green",
+                hex: "#00FF00",
+                text: "black",
+                glow: true,
+              };
+              equation = "Selected Green Light.";
+            }
+          } else if (current.length === 2) {
+            if (current.includes("red") && current.includes("green")) {
+              result = {
+                name: "Yellow",
+                hex: "#FFFF00",
+                text: "black",
+                glow: true,
+              };
+              equation = "Mixed Red and Green. Result is Yellow.";
+            } else if (current.includes("red") && current.includes("blue")) {
+              result = {
+                name: "Magenta",
+                hex: "#FF00FF",
+                text: "white",
+                glow: true,
+              };
+              equation = "Mixed Red and Blue. Result is Magenta.";
+            } else if (current.includes("green") && current.includes("blue")) {
+              result = {
+                name: "Cyan",
+                hex: "#00FFFF",
+                text: "black",
+                glow: true,
+              };
+              equation = "Mixed Green and Blue. Result is Cyan.";
+            }
+          } else if (current.length === 3) {
+            result = {
+              name: "White",
+              hex: "#FFFFFF",
+              text: "black",
+              glow: true,
+            };
+            equation = "Mixed Red, Green, and Blue. Result is White.";
+          }
+        }
+
+        // Apply result to DOM
+        resultBlob.style.backgroundColor = result.hex;
+        resultName.textContent = result.name;
+        resultName.style.color = result.text;
+        equationText.textContent = equation;
+
+        // Update examples
+        examples.textContent = `Examples: ${colorExamples[result.name] || "various objects"}`;
+
+        // Apply Accessibility Patterns to Result Blob
+        let existingOverlays = resultBlob.querySelectorAll('.pattern-overlay');
+        existingOverlays.forEach(el => el.remove());
+        
+        if (isAccessibilityMode) {
+          activeColors.forEach(color => {
+            const overlay = document.createElement('div');
+            overlay.className = `pattern-overlay pattern-${color}`;
+            // Adjust opacity for mixed colors to stay legible
+            overlay.style.opacity = activeColors.length > 1 ? "0.15" : "0.25";
+            resultBlob.appendChild(overlay);
+          });
+        }
+
+        // Update HEX display
+        currentResultColor = result;
+        hexText.textContent = result.hex;
+        hexDisplay.style.color = result.text;
+
+        // Glow effect for light mode
+        if (result.glow) {
+          resultBlob.style.boxShadow = `0 0 60px ${result.hex}`;
+        } else if (mode === "RGB") {
+          resultBlob.style.boxShadow = "0 0 50px rgba(255, 255, 255, 0.2)";
+        } else {
+          resultBlob.style.boxShadow = "inset 0 2px 10px rgba(0, 0, 0, 0.1)";
+        }
+
+        // Confetti for successful mixes
+        if (current.length > 1) {
+          resultBlob.classList.add('confetti');
+          setTimeout(() => resultBlob.classList.remove('confetti'), 1000);
+        }
+
+        // Screen Reader Announcement
+        let announcement = "";
+        if (current.length === 0) {
+          announcement = `No colors selected. Canvas is ${result.name}.`;
+        } else {
+          const joinedColors = current.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(" and ");
+          announcement = `Mixed ${joinedColors}. Result is ${result.name}.`;
+        }
+        srAnnouncer.textContent = announcement;
+      }
+
+      // Copy HEX to clipboard
+      function copyHex() {
+        const hex = currentResultColor.hex;
+        navigator.clipboard.writeText(hex).then(() => {
+          // Visual feedback
+          hexDisplay.classList.add("copied");
+          const originalText = hexText.textContent;
+          hexText.textContent = "Copied!";
+          
+          setTimeout(() => {
+            hexDisplay.classList.remove("copied");
+            hexText.textContent = originalText;
+          }, 1500);
+        }).catch(err => {
+          console.error("Failed to copy: ", err);
+          // Fallback feedback
+          hexText.textContent = "Copy failed";
+          setTimeout(() => {
+            hexText.textContent = hex;
+          }, 1500);
+        });
+      }
+
+      // ==================
+      // KEYBOARD SHORTCUTS
+      // ==================
+      
+      function setupKeyboardShortcuts() {
+        document.addEventListener('keydown', (e) => {
+          // Ignore if user is typing in an input field
+          if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+          
+          const key = e.key.toLowerCase();
+          
+          switch (key) {
+            case 'r':
+              toggleColor('red');
+              break;
+            case 'y':
+              // Yellow only in Paint mode
+              if (mode === 'RYB') toggleColor('yellow');
+              break;
+            case 'g':
+              // Green only in Light mode
+              if (mode === 'RGB') toggleColor('green');
+              break;
+            case 'b':
+              toggleColor('blue');
+              break;
+            case ' ':
+              e.preventDefault(); // Prevent page scroll
+              reset();
+              break;
+            case 'Tab':
+              e.preventDefault(); // Prevent tab navigation
+              switchMode(mode === 'RYB' ? 'RGB' : 'RYB');
+              break;
+          }
+        });
+      }
+
+      // Initialize on load
+      init();
+      setupKeyboardShortcuts();
+    </script>
+
+    <!-- Tutorial Modal -->
+    <div id="tutorial-modal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <h2>Welcome to Color Mixer!</h2>
+        <p id="tutorial-text">Step 1: Click a color button to start mixing.</p>
+        <button id="tutorial-next">Next</button>
+        <button id="tutorial-skip">Skip Tutorial</button>
+      </div>
+    </div>
+  </body>
+</html>
