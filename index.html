@@ -32,10 +32,18 @@
         --transition-fast: 300ms;
 
         /* Accessibility Patterns (SVG Data URIs) */
-        --pattern-dots: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='10' cy='10' r='2.5' fill='currentColor' /%3E%3C/svg%3E");
-        --pattern-stripes: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,20 L20,0 M-5,5 L5,-5 M15,25 L25,15' stroke='currentColor' stroke-width='3' /%3E%3C/svg%3E");
-        --pattern-crosshatch: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,20 L20,0 M-5,5 L5,-5 M15,25 L25,15 M0,0 L20,20 M-5,15 L5,25 M15,-5 L25,5' stroke='currentColor' stroke-width='2' /%3E%3C/svg%3E");
-        --pattern-horizontal: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='0' y1='10' x2='20' y2='10' stroke='currentColor' stroke-width='3' /%3E%3C/svg%3E");
+        --pattern-dots-dark: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='10' cy='10' r='2.5' fill='%23000' /%3E%3C/svg%3E");
+        --pattern-dots-light: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='10' cy='10' r='2.5' fill='%23fff' /%3E%3C/svg%3E");
+        --pattern-stripes-dark: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,20 L20,0 M-5,5 L5,-5 M15,25 L25,15' stroke='%23000' stroke-width='3' /%3E%3C/svg%3E");
+        --pattern-stripes-light: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,20 L20,0 M-5,5 L5,-5 M15,25 L25,15' stroke='%23fff' stroke-width='3' /%3E%3C/svg%3E");
+        --pattern-crosshatch-dark: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,20 L20,0 M-5,5 L5,-5 M15,25 L25,15 M0,0 L20,20 M-5,15 L5,25 M15,-5 L25,5' stroke='%23000' stroke-width='2' /%3E%3C/svg%3E");
+        --pattern-crosshatch-light: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,20 L20,0 M-5,5 L5,-5 M15,25 L25,15 M0,0 L20,20 M-5,15 L5,25 M15,-5 L25,5' stroke='%23fff' stroke-width='2' /%3E%3C/svg%3E");
+        --pattern-horizontal-dark: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='0' y1='10' x2='20' y2='10' stroke='%23000' stroke-width='3' /%3E%3C/svg%3E");
+        --pattern-horizontal-light: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='0' y1='10' x2='20' y2='10' stroke='%23fff' stroke-width='3' /%3E%3C/svg%3E");
+        --pattern-dots: var(--pattern-dots-dark);
+        --pattern-stripes: var(--pattern-stripes-dark);
+        --pattern-crosshatch: var(--pattern-crosshatch-dark);
+        --pattern-horizontal: var(--pattern-horizontal-dark);
 
         /* Paint Mode Colors */
         --paint-bg: #f8fafc;
@@ -78,10 +86,18 @@
 
       body.paint-mode {
         background-color: var(--paint-bg);
+        --pattern-dots: var(--pattern-dots-dark);
+        --pattern-stripes: var(--pattern-stripes-dark);
+        --pattern-crosshatch: var(--pattern-crosshatch-dark);
+        --pattern-horizontal: var(--pattern-horizontal-dark);
       }
 
       body.light-mode {
         background-color: var(--light-bg);
+        --pattern-dots: var(--pattern-dots-light);
+        --pattern-stripes: var(--pattern-stripes-light);
+        --pattern-crosshatch: var(--pattern-crosshatch-light);
+        --pattern-horizontal: var(--pattern-horizontal-light);
       }
 
       /* ==================
@@ -508,18 +524,35 @@
         background-repeat: repeat;
       }
 
-      body.paint-mode.accessibility-mode .pattern-overlay {
-        color: black;
-      }
-
-      body.light-mode.accessibility-mode .pattern-overlay {
-        color: white;
-      }
-
       .pattern-red { background-image: var(--pattern-stripes); }
       .pattern-blue { background-image: var(--pattern-dots); }
       .pattern-yellow { background-image: var(--pattern-crosshatch); }
       .pattern-green { background-image: var(--pattern-horizontal); }
+
+      /* High Contrast Mode */
+      body.high-contrast-mode {
+        --paint-bg: #000000;
+        --paint-text-primary: #ffffff;
+        --paint-text-muted: #cccccc;
+        --paint-border: #ffffff;
+        --light-bg: #ffffff;
+        --light-text-primary: #000000;
+        --light-text-muted: #333333;
+        --light-border: #000000;
+      }
+
+      body.high-contrast-mode .color-btn {
+        border: 2px solid currentColor;
+      }
+
+      body.high-contrast-mode .result-blob {
+        border: 3px solid currentColor;
+      }
+
+      body.high-contrast-mode .equation-text,
+      body.high-contrast-mode .examples {
+        font-weight: 700;
+      }
 
       body.paint-mode .color-btn.active {
         box-shadow: 0 0 0 4px white, 0 0 0 6px #cbd5e1;
@@ -778,6 +811,22 @@
         background: rgba(16, 185, 129, 0.1);
       }
 
+      /* Keyboard Navigation Focus Styles */
+      button:focus,
+      .color-btn:focus,
+      .hex-display:focus,
+      .share-btn:focus {
+        outline: 2px solid #3b82f6;
+        outline-offset: 2px;
+      }
+
+      body.light-mode button:focus,
+      body.light-mode .color-btn:focus,
+      body.light-mode .hex-display:focus,
+      body.light-mode .share-btn:focus {
+        outline-color: #1d4ed8;
+      }
+
       @keyframes slideDown {
         from { transform: translateY(-10px); opacity: 0; }
         to { transform: translateY(0); opacity: 1; }
@@ -851,6 +900,37 @@
       @keyframes confetti-fall {
         0% { opacity: 1; transform: translateY(0) rotate(0deg); }
         100% { opacity: 0; transform: translateY(50px) rotate(360deg); }
+      }
+
+      /* Enhanced Success Pulse */
+      .pulse-success {
+        animation: pulse-success-animation 0.6s ease-out;
+      }
+
+      @keyframes pulse-success-animation {
+        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+        50% { transform: scale(1.15); box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); }
+        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+      }
+
+      /* Multi-color Confetti */
+      .result-blob.confetti::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+          radial-gradient(circle, #ff0000 1px, transparent 1px),
+          radial-gradient(circle, #00ff00 1px, transparent 1px),
+          radial-gradient(circle, #0000ff 1px, transparent 1px),
+          radial-gradient(circle, #ffff00 1px, transparent 1px);
+        background-size: 15px 15px, 20px 20px, 25px 25px, 30px 30px;
+        background-position: 0 0, 5px 5px, 10px 10px, 15px 15px;
+        animation: confetti-fall 1.5s infinite linear;
+        pointer-events: none;
+        opacity: 0.6;
       }
 
       /* Tutorial Modal */
@@ -1002,6 +1082,30 @@
         border-color: var(--light-text-muted) transparent transparent transparent;
       }
 
+      /* Reduced Motion Support */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+        
+        .equation-text {
+          animation: none !important;
+        }
+        
+        .result-blob .shine {
+          opacity: 0 !important;
+        }
+        
+        .color-btn.active {
+          box-shadow: none !important;
+        }
+      }
+
     </style>
   </head>
   <body class="paint-mode">
@@ -1060,6 +1164,15 @@
         <circle cx="12" cy="12" r="3"/>
       </svg>
       <span>Accessibility</span>
+    </button>
+
+    <!-- High Contrast Toggle -->
+    <button class="challenge-toggle-btn" id="high-contrast-toggle-btn" onclick="toggleHighContrastMode()" style="margin-bottom: 0.5rem;" aria-pressed="false">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 2v20M2 12h20"/>
+      </svg>
+      <span>High Contrast</span>
     </button>
 
     <!-- Challenge Toggle -->
@@ -1188,6 +1301,7 @@
       let mode = "RYB"; // 'RYB' = Paint, 'RGB' = Light
       let isChallengeMode = false;
       let isAccessibilityMode = false;
+      let isHighContrastMode = false;
       let currentTarget = null; // { name: 'Purple', hex: '...' }
 
       // ==================
@@ -1216,6 +1330,7 @@
       // Challenge & Accessibility DOM
       const challengeBtn = document.getElementById("challenge-toggle-btn");
       const accessibilityBtn = document.getElementById("accessibility-toggle-btn");
+      const highContrastBtn = document.getElementById("high-contrast-toggle-btn");
       const challengeBar = document.getElementById("challenge-bar");
       const targetDot = document.getElementById("target-dot");
       const targetName = document.getElementById("target-name");
@@ -1365,6 +1480,21 @@
         updateResult();
       }
 
+      function toggleHighContrastMode() {
+        isHighContrastMode = !isHighContrastMode;
+        localStorage.setItem("highContrastMode", isHighContrastMode);
+        
+        if (isHighContrastMode) {
+          body.classList.add('high-contrast-mode');
+          highContrastBtn.classList.add('active');
+          highContrastBtn.setAttribute('aria-pressed', 'true');
+        } else {
+          body.classList.remove('high-contrast-mode');
+          highContrastBtn.classList.remove('active');
+          highContrastBtn.setAttribute('aria-pressed', 'false');
+        }
+      }
+
       function startChallenge() {
         // Define possible targets based on mode
         let targets = [];
@@ -1414,7 +1544,16 @@
       function showSuccess() {
         successMessage.textContent = `You made ${currentTarget.name}!`;
         successOverlay.classList.add('active');
-        // Play sound if we add audio later
+        
+        // Trigger visual fanfare
+        resultBlob.classList.add('pulse-success');
+        resultBlob.classList.add('confetti');
+        
+        // Remove fanfare after some time
+        setTimeout(() => {
+          resultBlob.classList.remove('pulse-success');
+          resultBlob.classList.remove('confetti');
+        }, 3000);
       }
 
       function nextChallenge() {
@@ -1484,6 +1623,15 @@
           accessibilityBtn.setAttribute('aria-pressed', 'true');
           renderColorButtons();
           updateResult();
+        }
+
+        // Load saved high contrast preference
+        const savedHighContrast = localStorage.getItem("highContrastMode");
+        if (savedHighContrast === "true") {
+          isHighContrastMode = true;
+          body.classList.add('high-contrast-mode');
+          highContrastBtn.classList.add('active');
+          highContrastBtn.setAttribute('aria-pressed', 'true');
         }
 
         // Show tutorial if not shown before
