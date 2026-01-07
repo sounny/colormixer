@@ -26,7 +26,8 @@ To create an engaging and accessible educational web application that empowers K
 *   **Dual-Mode Mixer:** One-click toggle between Paint (RYB) and Light (RGB) modes.
 *   **Interactive Canvas:** Visual "blob" or canvas that reacts instantly to color inputs.
 *   **Challenge Mode:** Gamified prompts to encourage active learning.
-*   **Contextual Education:** Tooltips or pop-ups explaining the *why* behind the mix.
+*   **Contextual Education:** "Learn Why" tooltips providing kid-friendly scientific explanations for every color mix.
+*   **Enhanced Accessibility:** Integrated high-contrast text and pattern overlays to support color blindness and low vision.
 
 ## 6. Project Collaboration & Agents
 *   **Agent Roles:** The development process explicitly integrates multiple AI agents (Gemini CLI, GitHub Copilot, OpenAI Codex) to simulate a diverse engineering team.
