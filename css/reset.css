@@ -1,0 +1,38 @@
+/* ==================
+   CSS RESET & VARIABLES
+   ================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --transition-speed: 500ms;
+  --transition-fast: 300ms;
+
+  /* Paint Mode Colors */
+  --paint-bg: #f8fafc;
+  --paint-card: #ffffff;
+  --paint-border: #e2e8f0;
+  --paint-text-primary: #1e293b;
+  --paint-text-secondary: #64748b;
+  --paint-text-muted: #475569;
+  --paint-red: #ff4136;
+  --paint-yellow: #ffdc00;
+  --paint-blue: #0074d9;
+
+  /* Light Mode Colors */
+  --light-bg: #0f172a;
+  --light-card: #1e293b;
+  --light-border: #334155;
+  --light-text-primary: #ffffff;
+  --light-text-secondary: #94a3b8;
+  --light-text-muted: #cbd5e1;
+  --light-red: #ff0000;
+  --light-green: #00ff00;
+  --light-blue: #0000ff;
+}
