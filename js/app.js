@@ -477,6 +477,7 @@ function updateResult() {
   srAnnouncer.textContent = announcement;
 
   // Check for challenge mode win
+  // Check Challenge Mode
   checkChallenge(result.name);
 }
 

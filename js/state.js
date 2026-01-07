@@ -122,6 +122,9 @@ const colorExplanations = {
   }
 };
 
+// ==================
+// COLOR MIXING LOOKUP TABLE
+// ==================
 const mixingTable = {
   RYB: {
     // Empty state (no colors selected)
