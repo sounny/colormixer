@@ -14,6 +14,46 @@ let currentTutorialTarget = null;
 let currentResultColor = { hex: "#FFFFFF", text: "black" };
 
 // ==================
+// DOM ELEMENTS
+// ==================
+
+// DOM References (initialized after DOM loads)
+const body = document.body;
+const headerIcon = document.getElementById("header-icon");
+const headerTitleText = document.getElementById("header-title-text");
+const headerSubtitle = document.getElementById("header-subtitle");
+const resultBlob = document.getElementById("result-blob");
+const resultName = document.getElementById("result-name");
+const equationText = document.getElementById("equation-text");
+const examples = document.getElementById("examples");
+const colorButtonsContainer = document.getElementById("color-buttons");
+const footerText = document.getElementById("footer-text");
+const footerMainText = document.getElementById("footer-main-text");
+const keyboardHint = document.querySelector(".keyboard-hint");
+const shineEffect = document.getElementById("shine-effect");
+const hexDisplay = document.getElementById("hex-display");
+const hexText = document.getElementById("hex-text");
+const shareBtn = document.getElementById("share-btn");
+const srAnnouncer = document.getElementById("sr-announcer");
+
+// Challenge & Accessibility DOM
+const challengeBtn = document.getElementById("challenge-toggle-btn");
+const accessibilityBtn = document.getElementById("accessibility-toggle-btn");
+const highContrastBtn = document.getElementById("high-contrast-toggle-btn");
+const challengeBar = document.getElementById("challenge-bar");
+const targetDot = document.getElementById("target-dot");
+const targetName = document.getElementById("target-name");
+const successOverlay = document.getElementById("success-overlay");
+const successMessage = document.getElementById("success-message");
+
+// Tutorial DOM
+const tutorialBackdrop = document.getElementById("tutorial-backdrop");
+const tutorialModal = document.getElementById("tutorial-modal");
+const tutorialText = document.getElementById("tutorial-text");
+const tutorialNext = document.getElementById("tutorial-next");
+const tutorialSkip = document.getElementById("tutorial-skip");
+
+// ==================
 // ICONS & COLORS
 // ==================
 
