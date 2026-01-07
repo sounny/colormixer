@@ -122,6 +122,136 @@ const colorExplanations = {
   }
 };
 
+// ==================
+// COLOR MIXING LOOKUP TABLE
+// ==================
+const mixingTable = {
+  RYB: {
+    // Empty state (no colors selected)
+    "": {
+      name: "White",
+      hex: "#FFFFFF",
+      text: "black",
+      glow: false,
+      equation: "Pick a color to start",
+    },
+    // Single colors
+    red: {
+      name: "Red",
+      hex: "#FF4136",
+      text: "white",
+      glow: false,
+      equation: "Selected Red.",
+    },
+    blue: {
+      name: "Blue",
+      hex: "#0074D9",
+      text: "white",
+      glow: false,
+      equation: "Selected Blue.",
+    },
+    yellow: {
+      name: "Yellow",
+      hex: "#FFDC00",
+      text: "black",
+      glow: false,
+      equation: "Selected Yellow.",
+    },
+    // Two-color mixes (keys are sorted alphabetically)
+    "blue,red": {
+      name: "Purple",
+      hex: "#B10DC9",
+      text: "white",
+      glow: false,
+      equation: "Mixed Red and Blue. Result is Purple.",
+    },
+    "blue,yellow": {
+      name: "Green",
+      hex: "#2ECC40",
+      text: "white",
+      glow: false,
+      equation: "Mixed Blue and Yellow. Result is Green.",
+    },
+    "red,yellow": {
+      name: "Orange",
+      hex: "#FF851B",
+      text: "black",
+      glow: false,
+      equation: "Mixed Red and Yellow. Result is Orange.",
+    },
+    // Three-color mix
+    "blue,red,yellow": {
+      name: "Brown",
+      hex: "#5b3c11",
+      text: "white",
+      glow: false,
+      equation: "Mixed Red, Yellow, and Blue. Result is Brown.",
+    },
+  },
+  RGB: {
+    // Empty state (no lights on)
+    "": {
+      name: "Black",
+      hex: "#000000",
+      text: "white",
+      glow: false,
+      equation: "Pick a color to start",
+    },
+    // Single colors
+    red: {
+      name: "Red",
+      hex: "#FF0000",
+      text: "white",
+      glow: true,
+      equation: "Selected Red Light.",
+    },
+    blue: {
+      name: "Blue",
+      hex: "#0000FF",
+      text: "white",
+      glow: true,
+      equation: "Selected Blue Light.",
+    },
+    green: {
+      name: "Green",
+      hex: "#00FF00",
+      text: "black",
+      glow: true,
+      equation: "Selected Green Light.",
+    },
+    // Two-color mixes (keys are sorted alphabetically)
+    "green,red": {
+      name: "Yellow",
+      hex: "#FFFF00",
+      text: "black",
+      glow: true,
+      equation: "Mixed Red and Green. Result is Yellow.",
+    },
+    "blue,red": {
+      name: "Magenta",
+      hex: "#FF00FF",
+      text: "white",
+      glow: true,
+      equation: "Mixed Red and Blue. Result is Magenta.",
+    },
+    "blue,green": {
+      name: "Cyan",
+      hex: "#00FFFF",
+      text: "black",
+      glow: true,
+      equation: "Mixed Green and Blue. Result is Cyan.",
+    },
+    // Three-color mix
+    "blue,green,red": {
+      name: "White",
+      hex: "#FFFFFF",
+      text: "black",
+      glow: true,
+      equation: "Mixed Red, Green, and Blue. Result is White.",
+    },
+  },
+};
+
 // Tutorial variables
 const tutorialSteps = [
   { text: "Step 1: Click a color button to start mixing.", target: "#color-buttons" },
