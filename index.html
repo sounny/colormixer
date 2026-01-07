@@ -864,6 +864,96 @@
       .modal button:hover {
         background: #e63946;
       }
+
+      /* ==================
+         EDUCATIONAL TOOLTIP
+         ================== */
+      
+      .edu-tooltip-container {
+        position: relative;
+        margin-top: 1rem;
+        display: flex;
+        justify-content: center;
+      }
+
+      .tooltip-btn {
+        background: transparent;
+        border: 2px solid var(--paint-text-secondary);
+        color: var(--paint-text-secondary);
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s;
+      }
+
+      .tooltip-btn:hover {
+        background: rgba(0,0,0,0.05);
+        color: var(--paint-text-primary);
+        border-color: var(--paint-text-primary);
+      }
+
+      body.light-mode .tooltip-btn {
+        border-color: var(--light-text-secondary);
+        color: var(--light-text-secondary);
+      }
+
+      body.light-mode .tooltip-btn:hover {
+        background: rgba(255,255,255,0.1);
+        color: var(--light-text-primary);
+        border-color: var(--light-text-primary);
+      }
+
+      .tooltip-content {
+        position: absolute;
+        bottom: 120%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--paint-card);
+        border: 2px solid var(--paint-border);
+        padding: 1rem;
+        border-radius: 1rem;
+        width: 280px;
+        text-align: center;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.2s;
+        z-index: 10;
+        pointer-events: none;
+      }
+
+      .tooltip-content.active {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        bottom: 130%;
+      }
+
+      body.light-mode .tooltip-content {
+        background: var(--light-card);
+        border-color: var(--light-text-muted);
+        color: var(--light-text-primary);
+      }
+
+      .tooltip-content::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -10px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: var(--paint-border) transparent transparent transparent;
+      }
+
+      body.light-mode .tooltip-content::after {
+        border-color: var(--light-text-muted) transparent transparent transparent;
+      }
+
     </style>
   </head>
   <body class="paint-mode">
@@ -968,6 +1058,21 @@
       <!-- Equation Text -->
       <div class="equation-container">
         <p class="equation-text" id="equation-text" role="status">Pick a color to start</p>
+      </div>
+
+      <!-- Educational Tooltip -->
+      <div class="edu-tooltip-container">
+        <button id="tooltip-toggle" class="tooltip-btn" onclick="toggleTooltip()" aria-expanded="false">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          Learn Why
+        </button>
+        <div id="edu-tooltip" class="tooltip-content" role="status">
+          <p id="tooltip-text">Mix colors to learn how they work!</p>
+        </div>
       </div>
 
       <!-- Real-World Examples -->
@@ -1114,6 +1219,30 @@
         Black: "coal, space, ravens"
       };
 
+      // Kid-friendly scientific explanations
+      const colorExplanations = {
+        RYB: {
+          Red: "Red is a primary color. You can't mix other paints to make it!",
+          Blue: "Blue is a primary color. It's one of the main building blocks.",
+          Yellow: "Yellow is a primary color. It's bright and sunny!",
+          Purple: "Red and Blue paints soak up all colors except purple, which bounces back to your eyes!",
+          Green: "Blue and Yellow paints mix to make Green. It's a secondary color.",
+          Orange: "Red and Yellow paints mix to make Orange. It's a secondary color.",
+          Brown: "Mixing everything makes Brown! The paints are absorbing almost all the light.",
+          White: "White canvas means no paint is absorbing light yet."
+        },
+        RGB: {
+          Red: "Red light adds energy to the dark screen.",
+          Blue: "Blue light adds energy to the dark screen.",
+          Green: "Green light adds energy to the dark screen.",
+          Yellow: "Red and Green light mix to make Yellow. It's brighter than both!",
+          Magenta: "Red and Blue light mix to make Magenta. It's a secondary light color.",
+          Cyan: "Green and Blue light mix to make Cyan. It's a secondary light color.",
+          White: "All the lights together make White! It's pure energy.",
+          Black: "Black means the lights are off. It's total darkness."
+        }
+      };
+
       // Tutorial variables
       let tutorialStep = 0;
       const tutorialSteps = [
@@ -1243,14 +1372,51 @@
 
       // Initialize
       function init() {
-        // Load saved mode if available
-        const savedMode = localStorage.getItem("colorMixerMode");
-        if (savedMode && (savedMode === "RYB" || savedMode === "RGB")) {
-          switchMode(savedMode, false); // false to avoid redundant save
+        // ==================
+        // EMBED MODE: Parse URL params
+        // ==================
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const embedMode = urlParams.get('mode');
+        if (embedMode === 'RYB' || embedMode === 'RGB') {
+          mode = embedMode;
         } else {
-          renderColorButtons();
-          updateResult();
+          // Load saved mode if available
+          const savedMode = localStorage.getItem("colorMixerMode");
+          if (savedMode && (savedMode === "RYB" || savedMode === "RGB")) {
+            mode = savedMode;
+          }
         }
+
+        const embedColors = urlParams.get('colors');
+        if (embedColors) {
+          const colorsArray = embedColors.split(',').map(c => c.trim().toLowerCase());
+          activeColors = colorsArray.filter(c => ['red', 'yellow', 'blue', 'green'].includes(c));
+        }
+
+        // Apply mode and render
+        if (mode === "RYB") {
+          body.classList.remove("light-mode");
+          body.classList.add("paint-mode");
+          headerIcon.innerHTML = paletteIconSVG;
+          headerTitleText.textContent = "Paint Mixer";
+          headerSubtitle.textContent = "Mixing paint gets darker!";
+          footerMainText.textContent = "Red + Yellow + Blue = Brown Paint";
+          keyboardHint.textContent = "Keyboard: R Y B colors · Space reset · Tab mode";
+          shineEffect.style.opacity = "0.3";
+        } else {
+          body.classList.remove("paint-mode");
+          body.classList.add("light-mode");
+          headerIcon.innerHTML = zapIconSVG;
+          headerTitleText.textContent = "Light Mixer";
+          headerSubtitle.textContent = "Mixing light gets brighter!";
+          footerMainText.textContent = "Red + Green + Blue = White Light";
+          keyboardHint.textContent = "Keyboard: R G B colors · Space reset · Tab mode";
+          shineEffect.style.opacity = "0";
+        }
+
+        renderColorButtons();
+        updateResult();
 
         // Load saved accessibility preference
         const savedAccessibility = localStorage.getItem("accessibilityMode");
@@ -1390,6 +1556,30 @@
       function hideTutorial() {
         tutorialModal.style.display = 'none';
         localStorage.setItem('tutorialShown', 'true');
+      }
+
+      // ==================
+      // TOOLTIP LOGIC
+      // ==================
+
+      function toggleTooltip() {
+        const tooltip = document.getElementById('edu-tooltip');
+        const btn = document.getElementById('tooltip-toggle');
+        const isVisible = tooltip.classList.contains('active');
+        
+        if (isVisible) {
+          tooltip.classList.remove('active');
+          btn.setAttribute('aria-expanded', 'false');
+        } else {
+          tooltip.classList.add('active');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      }
+
+      function updateTooltip(colorName) {
+        const tooltipText = document.getElementById('tooltip-text');
+        const explanation = colorExplanations[mode][colorName] || "Mix colors to see what happens!";
+        tooltipText.textContent = explanation;
       }
 
       // Update the result display based on active colors
@@ -1561,6 +1751,9 @@
 
         // Update examples
         examples.textContent = `Examples: ${colorExamples[result.name] || "various objects"}`;
+        
+        // Update tooltip content
+        updateTooltip(result.name);
 
         // Apply Accessibility Patterns to Result Blob
         let existingOverlays = resultBlob.querySelectorAll('.pattern-overlay');
