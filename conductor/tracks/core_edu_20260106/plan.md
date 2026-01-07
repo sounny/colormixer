@@ -1,7 +1,7 @@
 # Plan: Core Educational Features
 
 ## Phase 1: High-Contrast & UI Legibility
-- [ ] Task: Write Tests for UI color contrast ratios
+- [x] Task: Write Tests for UI color contrast ratios 3c8273a
 - [ ] Task: Implement High-Contrast CSS variables and refinements
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: High-Contrast & UI Legibility' (Protocol in workflow.md)
 
