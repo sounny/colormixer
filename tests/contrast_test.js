@@ -34,13 +34,13 @@ function getContrastRatio(color1, color2) {
 
 // Main Test
 try {
-    const htmlPath = path.join(__dirname, '../index.html');
-    const html = fs.readFileSync(htmlPath, 'utf8');
+    const cssPath = path.join(__dirname, '../css/reset.css');
+    const css = fs.readFileSync(cssPath, 'utf8');
 
     // Extract :root block
-    const rootBlockMatch = html.match(/:root\s*{([^}]+)}/s);
+    const rootBlockMatch = css.match(/:root\s*{([^}]+)}/s);
     if (!rootBlockMatch) {
-        throw new Error('Could not find :root CSS block');
+        throw new Error('Could not find :root CSS block in css/reset.css');
     }
     const rootContent = rootBlockMatch[1];
 
