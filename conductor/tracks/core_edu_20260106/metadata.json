@@ -1,0 +1,8 @@
+{
+  "track_id": "core_edu_20260106",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-06T19:36:00Z",
+  "updated_at": "2026-01-06T19:36:00Z",
+  "description": "Build and verify core educational features including pattern-based accessibility, contextual educational tooltips, and high-contrast UI refinements."
+}
