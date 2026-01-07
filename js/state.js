@@ -8,10 +8,39 @@ let mode = "RYB"; // 'RYB' = Paint, 'RGB' = Light
 let isChallengeMode = false;
 let isAccessibilityMode = false;
 let isHighContrastMode = false;
+let isSoundEnabled = true;
+let isDemoMode = false;
+let demoInterval = null;
+let isLearnMode = false;
+let currentLearnStep = 0;
+let challengeLevel = 1; // 1=Easy, 2=Medium, 3=Hard, 4=Expert
+let challengeWins = 0;
+let totalWins = 0;
 let currentTarget = null; // { name: 'Purple', hex: '...' }
-let tutorialStep = 0;
-let currentTutorialTarget = null;
-let currentResultColor = { hex: "#FFFFFF", text: "black" };
+
+// Achievements State
+let unlockedAchievements = JSON.parse(localStorage.getItem('achievements')) || [];
+let achievementStats = JSON.parse(localStorage.getItem('achievementStats')) || {
+  mixCount: 0,
+  challengeWinsTotal: 0,
+  secondariesFound: [],
+  modesSwitched: []
+};
+
+const achievementDefs = [
+  { id: 'first_mix', name: 'First Mix!', icon: '🎨', desc: 'You mixed your first color!' },
+  { id: 'color_expert', name: 'Color Expert', icon: '🌈', desc: 'Discovered all secondary colors!' },
+  { id: 'mode_switcher', name: 'Light & Paint', icon: '💡', desc: 'Tried both mixing modes!' },
+  { id: 'champion', name: 'Challenge Champion', icon: '🏆', desc: 'Won 5 challenges!' }
+];
+
+// Challenge tiers
+const challengeTiers = {
+  1: { name: 'Easy', targets: ['Orange', 'Purple', 'Green'], mode: 'RYB' },
+  2: { name: 'Medium', targets: ['Yellow', 'Magenta', 'Cyan'], mode: 'RGB' },
+  3: { name: 'Hard', targets: ['Brown'], mode: 'RYB' },
+  4: { name: 'Expert', targets: ['White'], mode: 'RGB' }
+};
 
 // ==================
 // DOM ELEMENTS
@@ -40,6 +69,10 @@ const srAnnouncer = document.getElementById("sr-announcer");
 const challengeBtn = document.getElementById("challenge-toggle-btn");
 const accessibilityBtn = document.getElementById("accessibility-toggle-btn");
 const highContrastBtn = document.getElementById("high-contrast-toggle-btn");
+const soundBtn = document.getElementById("sound-toggle-btn");
+const soundIcon = document.getElementById("sound-icon");
+const demoBtn = document.getElementById("demo-toggle-btn");
+const learnBtn = document.getElementById("learn-toggle-btn");
 const challengeBar = document.getElementById("challenge-bar");
 const targetDot = document.getElementById("target-dot");
 const targetName = document.getElementById("target-name");
@@ -259,4 +292,71 @@ const tutorialSteps = [
   { text: "Step 3: Mix two colors to see the result!", target: "#result-blob", shape: "round" },
   { text: "Step 4: Copy the HEX code to your clipboard.", target: "#hex-display" },
   { text: "Tutorial complete! Enjoy mixing colors!" }
+];
+
+// Learning Path steps
+const learnPathSteps = [
+  { 
+    title: "The Primaries", 
+    text: "Paints have three main colors: Red, Yellow, and Blue. Click Red to start!",
+    mode: "RYB",
+    require: ["red"],
+    target: "Red"
+  },
+  { 
+    title: "Mixing Orange", 
+    text: "Red and Yellow paints make Orange. Now click Yellow!",
+    mode: "RYB",
+    require: ["red", "yellow"],
+    target: "Orange"
+  },
+  { 
+    title: "Mixing Green", 
+    text: "Blue and Yellow paints make Green. Try Blue and Yellow!",
+    mode: "RYB",
+    require: ["blue", "yellow"],
+    target: "Green"
+  },
+  { 
+    title: "Mixing Purple", 
+    text: "Red and Blue paints make Purple. Can you make it?",
+    mode: "RYB",
+    require: ["red", "blue"],
+    target: "Purple"
+  },
+  { 
+    title: "The Mystery Color", 
+    text: "What happens when you mix ALL three paints? Try it!",
+    mode: "RYB",
+    require: ["red", "yellow", "blue"],
+    target: "Brown"
+  },
+  { 
+    title: "Light is Different!", 
+    text: "Light mixing is the opposite of paint. Switch to Light (RGB) mode!",
+    mode: "RGB",
+    require: [],
+    target: "Black"
+  },
+  { 
+    title: "Brighter and Brighter", 
+    text: "Adding more light colors makes things brighter. Mix Red and Green light!",
+    mode: "RGB",
+    require: ["red", "green"],
+    target: "Yellow"
+  },
+  { 
+    title: "White Light", 
+    text: "Mix all three lights to make pure White! It's pure energy.",
+    mode: "RGB",
+    require: ["red", "green", "blue"],
+    target: "White"
+  },
+  { 
+    title: "You're a Color Expert!", 
+    text: "You've learned how paint and light work. Enjoy exploring!",
+    mode: "RYB",
+    require: [],
+    target: "Finished"
+  }
 ];

@@ -68,24 +68,176 @@ function toggleHighContrastMode() {
   }
 }
 
-function startChallenge() {
-  // Define possible targets based on mode
-  let targets = [];
-  if (mode === "RYB") {
-    targets = [
-      { name: "Purple", hex: "#B10DC9" },
-      { name: "Green", hex: "#2ECC40" },
-      { name: "Orange", hex: "#FF851B" },
-      { name: "Brown", hex: "#5b3c11" }
-    ];
-  } else {
-    targets = [
-      { name: "Yellow", hex: "#FFFF00" },
-      { name: "Magenta", hex: "#FF00FF" },
-      { name: "Cyan", hex: "#00FFFF" },
-      { name: "White", hex: "#FFFFFF" }
-    ];
+// ==================
+// SOUND LOGIC
+// ==================
+
+let audioCtx = null;
+
+function initAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
+}
+
+function toggleSound() {
+  isSoundEnabled = !isSoundEnabled;
+  localStorage.setItem("soundEnabled", isSoundEnabled);
+  
+  if (isSoundEnabled) {
+    soundBtn.classList.add('active');
+    soundBtn.setAttribute('aria-pressed', 'true');
+    soundIcon.innerHTML = `
+      <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+    `;
+  } else {
+    soundBtn.classList.remove('active');
+    soundBtn.setAttribute('aria-pressed', 'false');
+    soundIcon.innerHTML = `
+      <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+      <line x1="23" y1="9" x2="17" y2="15"/>
+      <line x1="17" y1="9" x2="23" y2="15"/>
+    `;
+  }
+}
+
+function playPopSound() {
+  if (!isSoundEnabled) return;
+  initAudio();
+  
+  const oscillator = audioCtx.createOscillator();
+  const gainNode = audioCtx.createGain();
+
+  oscillator.type = 'sine';
+  oscillator.frequency.setValueAtTime(400, audioCtx.currentTime);
+  oscillator.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.1);
+
+  gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+
+  oscillator.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  oscillator.start();
+  oscillator.stop(audioCtx.currentTime + 0.1);
+}
+
+function playSuccessSound() {
+  if (!isSoundEnabled) return;
+  initAudio();
+
+  const now = audioCtx.currentTime;
+  const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+
+  notes.forEach((freq, i) => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(freq, now + i * 0.1);
+    
+    gain.gain.setValueAtTime(0.1, now + i * 0.1);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.3);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now + i * 0.1);
+    osc.stop(now + i * 0.1 + 0.3);
+  });
+}
+
+// ==================
+// DEMO MODE LOGIC
+// ==================
+
+const demoSequence = [
+  { mode: 'RYB', colors: ['red'] },
+  { mode: 'RYB', colors: ['red', 'blue'] },
+  { mode: 'RYB', colors: ['blue', 'yellow'] },
+  { mode: 'RYB', colors: ['red', 'yellow'] },
+  { mode: 'RYB', colors: ['red', 'yellow', 'blue'] },
+  { mode: 'RGB', colors: ['red'] },
+  { mode: 'RGB', colors: ['red', 'green'] },
+  { mode: 'RGB', colors: ['green', 'blue'] },
+  { mode: 'RGB', colors: ['red', 'blue'] },
+  { mode: 'RGB', colors: ['red', 'green', 'blue'] }
+];
+
+let demoIndex = 0;
+
+function toggleDemoMode() {
+  isDemoMode = !isDemoMode;
+  
+  if (isDemoMode) {
+    demoBtn.classList.add('active');
+    demoBtn.setAttribute('aria-pressed', 'true');
+    demoBtn.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="6" y="4" width="4" height="16"></rect>
+        <rect x="14" y="4" width="4" height="16"></rect>
+      </svg>
+      <span>Stop Demo</span>
+    `;
+    startDemo();
+  } else {
+    demoBtn.classList.remove('active');
+    demoBtn.setAttribute('aria-pressed', 'false');
+    demoBtn.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="5 3 19 12 5 21 5 3"/>
+      </svg>
+      <span>Demo Mode</span>
+    `;
+    stopDemo();
+  }
+}
+
+function startDemo() {
+  demoIndex = 0;
+  runDemoStep();
+  demoInterval = setInterval(runDemoStep, 3000);
+}
+
+function stopDemo() {
+  if (demoInterval) {
+    clearInterval(demoInterval);
+    demoInterval = null;
+  }
+}
+
+function runDemoStep() {
+  const step = demoSequence[demoIndex];
+  
+  if (mode !== step.mode) {
+    switchMode(step.mode, false);
+  }
+  
+  activeColors = [...step.colors];
+  renderColorButtons();
+  updateResult();
+  
+  demoIndex = (demoIndex + 1) % demoSequence.length;
+}
+
+function startChallenge() {
+  const tier = challengeTiers[challengeLevel] || challengeTiers[1];
+
+  // Switch mode if needed for this level
+  if (tier.mode !== mode) {
+    switchMode(tier.mode, false);
+  }
+
+  // Define target hex codes
+  const targetDefinitions = {
+    "Purple": "#B10DC9", "Green": "#2ECC40", "Orange": "#FF851B", "Brown": "#5b3c11",
+    "Yellow": "#FFFF00", "Magenta": "#FF00FF", "Cyan": "#00FFFF", "White": "#FFFFFF"
+  };
+
+  // Get targets for current level
+  let targets = tier.targets.map(name => ({ name, hex: targetDefinitions[name] }));
 
   // Pick random target (different from previous if possible)
   let newTarget;
@@ -95,8 +247,8 @@ function startChallenge() {
 
   currentTarget = newTarget;
   
-  // Update UI
-  targetName.textContent = currentTarget.name;
+  // Update UI with Level Indicator
+  targetName.textContent = `${currentTarget.name} (Lvl ${challengeLevel})`;
   targetDot.style.backgroundColor = currentTarget.hex;
   
   // Reset canvas for new level
@@ -117,10 +269,45 @@ function checkChallenge(currentResultName) {
 function showSuccess() {
   successMessage.textContent = `You made ${currentTarget.name}!`;
   successOverlay.classList.add('active');
+  playSuccessSound();
   
+  // Reset any previous level-up styling
+  successMessage.classList.remove('rainbow-text');
+  const successCard = successOverlay.querySelector('.success-card');
+  successCard.classList.remove('level-up-active');
+
   // Trigger visual fanfare
   resultBlob.classList.add('pulse-success');
   resultBlob.classList.add('confetti');
+  
+  // Level Up Logic
+  challengeWins++;
+  totalWins++;
+  localStorage.setItem("totalWins", totalWins);
+
+  // Achievement: Champion (5 wins)
+  if (totalWins >= 5) {
+    unlockAchievement('champion');
+  }
+
+  if (challengeWins >= 3 && challengeLevel < 4) {
+    challengeLevel++;
+    challengeWins = 0;
+    localStorage.setItem("challengeLevel", challengeLevel);
+    
+    // Delayed Level Up Announcement with enhanced animations
+    setTimeout(() => {
+       successMessage.textContent = `Level Up! ${challengeTiers[challengeLevel].name} Mode Unlocked! 🚀`;
+       successMessage.classList.add('rainbow-text', 'animate-bounce-in');
+       successCard.classList.add('level-up-active');
+       
+       // Play success sound again but with a slight variation (if I had more sound types)
+       playSuccessSound();
+       
+       // Extra confetti for level up
+       resultBlob.classList.add('confetti');
+    }, 1500);
+  }
   
   // Remove fanfare after some time
   setTimeout(() => {
@@ -137,6 +324,126 @@ function nextChallenge() {
 function skipChallenge() {
   // Briefly shake the bar or just move next
   startChallenge();
+}
+
+// ==================
+// LEARNING PATH LOGIC
+// ==================
+
+function toggleLearnMode() {
+  isLearnMode = !isLearnMode;
+  
+  if (isLearnMode) {
+    // Disable other modes
+    if (isChallengeMode) toggleChallengeMode();
+    if (isDemoMode) toggleDemoMode();
+    
+    learnBtn.classList.add('active');
+    learnBtn.setAttribute('aria-pressed', 'true');
+    currentLearnStep = 0;
+    applyLearnStep();
+  } else {
+    learnBtn.classList.remove('active');
+    learnBtn.setAttribute('aria-pressed', 'false');
+    // Hide specialized UI if any
+    reset();
+  }
+}
+
+function applyLearnStep() {
+  const step = learnPathSteps[currentLearnStep];
+  if (!step) return;
+
+  // Update Tutorial Overlay (reusing its UI for guided learning)
+  tutorialStep = -1; // Special flag to indicate learn mode
+  tutorialBackdrop.style.display = "block";
+  tutorialModal.style.display = "flex";
+  
+  tutorialTitle.textContent = `Learn: ${step.title}`;
+  tutorialText.textContent = step.text;
+  tutorialNext.style.display = "none"; // User must perform action
+  tutorialSkip.textContent = "Exit Lesson";
+
+  // Auto-switch mode if needed
+  if (mode !== step.mode) {
+    switchMode(step.mode, false);
+  }
+}
+
+function checkLearnProgress(currentResultName, activeColors) {
+  if (!isLearnMode) return;
+
+  const step = learnPathSteps[currentLearnStep];
+  if (!step) return;
+
+  // Check if requirement met
+  const hasColors = step.require.every(c => activeColors.includes(c)) && activeColors.length === step.require.length;
+  
+  if (hasColors || (step.require.length === 0 && mode === step.mode && currentLearnStep > 0)) {
+    // Success!
+    currentLearnStep++;
+    if (currentLearnStep < learnPathSteps.length) {
+      setTimeout(() => {
+        playSuccessSound();
+        applyLearnStep();
+      }, 800);
+    } else {
+      // Finished all steps
+      setTimeout(() => {
+        playSuccessSound();
+        tutorialTitle.textContent = "Lesson Complete!";
+        tutorialText.textContent = "You've finished the Color Expert course!";
+        tutorialNext.style.display = "inline-block";
+        tutorialNext.textContent = "Finish";
+        tutorialNext.onclick = toggleLearnMode;
+      }, 800);
+    }
+  }
+}
+
+// ==================
+// ACHIEVEMENTS LOGIC
+// ==================
+
+function unlockAchievement(id) {
+  if (unlockedAchievements.includes(id)) return;
+
+  const achievement = achievementDefs.find(a => a.id === id);
+  if (!achievement) return;
+
+  unlockedAchievements.push(id);
+  localStorage.setItem("unlockedAchievements", JSON.stringify(unlockedAchievements));
+  
+  showAchievementToast(achievement);
+}
+
+function showAchievementToast(achievement) {
+  // Create toast element
+  const toast = document.createElement('div');
+  toast.className = 'achievement-toast';
+  toast.innerHTML = `
+    <div class="achievement-icon">${achievement.icon}</div>
+    <div class="achievement-text">
+      <span class="achievement-title">${achievement.name}</span>
+      <span class="achievement-desc">${achievement.desc}</span>
+    </div>
+  `;
+
+  document.body.appendChild(toast);
+
+  // Animate in
+  setTimeout(() => toast.classList.add('active'), 100);
+
+  // Play achievement sound (reusing success sound or a variation)
+  if (isSoundEnabled) {
+    playSuccessSound(); 
+  }
+
+  // Remove after 4 seconds
+  setTimeout(() => {
+    toast.classList.remove('active');
+    setTimeout(() => toast.remove(), 500);
+  }, 4000);
 }
 
 // Initialize
@@ -208,15 +515,65 @@ function init() {
     highContrastBtn.setAttribute('aria-pressed', 'true');
   }
 
+  // Load saved sound preference
+  const savedSound = localStorage.getItem("soundEnabled");
+  if (savedSound === "false") {
+    isSoundEnabled = false;
+    soundBtn.classList.remove('active');
+    soundBtn.setAttribute('aria-pressed', 'false');
+    soundIcon.innerHTML = `
+      <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+      <line x1="23" y1="9" x2="17" y2="15"/>
+      <line x1="17" y1="9" x2="23" y2="15"/>
+    `;
+  } else {
+    soundBtn.classList.add('active');
+    soundBtn.setAttribute('aria-pressed', 'true');
+  }
+
+  // Load saved challenge level
+  const savedLevel = localStorage.getItem("challengeLevel");
+  if (savedLevel) {
+    challengeLevel = parseInt(savedLevel, 10);
+  }
+
+  // Load achievements and stats
+  const savedAchievements = localStorage.getItem("unlockedAchievements");
+  if (savedAchievements) {
+    unlockedAchievements = JSON.parse(savedAchievements);
+  }
+
+  const savedTotalWins = localStorage.getItem("totalWins");
+  if (savedTotalWins) {
+    totalWins = parseInt(savedTotalWins, 10);
+  }
+
   // Show tutorial if not shown before
   if (!localStorage.getItem('tutorialShown')) {
     setTimeout(showTutorial, 500); // Delay to let page load
   }
 
   // Tutorial event listeners
-  tutorialNext.addEventListener('click', nextTutorial);
-  tutorialSkip.addEventListener('click', skipTutorial);
-  tutorialBackdrop.addEventListener('click', skipTutorial);
+  tutorialNext.addEventListener('click', () => {
+    if (isLearnMode) return;
+    nextTutorial();
+  });
+  tutorialSkip.addEventListener('click', () => {
+    if (isLearnMode) {
+      toggleLearnMode();
+      hideTutorial();
+    } else {
+      skipTutorial();
+    }
+  });
+  tutorialBackdrop.addEventListener('click', () => {
+    if (isLearnMode) {
+      toggleLearnMode();
+      hideTutorial();
+    } else {
+      skipTutorial();
+    }
+  });
 }
 
 // Render color buttons based on mode
@@ -256,6 +613,8 @@ function renderColorButtons() {
 
 // Toggle color selection
 function toggleColor(colorName) {
+  if (isDemoMode) toggleDemoMode(); // Stop demo if user interacts
+  playPopSound();
   if (activeColors.includes(colorName)) {
     activeColors = activeColors.filter((c) => c !== colorName);
   } else {
@@ -267,6 +626,8 @@ function toggleColor(colorName) {
 
 // Reset all colors
 function reset() {
+  if (isDemoMode) toggleDemoMode();
+  playPopSound();
   activeColors = [];
   renderColorButtons();
   updateResult();
@@ -274,6 +635,8 @@ function reset() {
 
 // Switch between Paint and Light mode
 function switchMode(newMode, shouldSave = true) {
+  if (isDemoMode && shouldSave) toggleDemoMode();
+  playPopSound();
   mode = newMode;
   activeColors = []; // Clear to avoid confusion
 
@@ -305,6 +668,11 @@ function switchMode(newMode, shouldSave = true) {
 
   renderColorButtons();
   updateResult();
+
+  // Achievement: Mode Switcher (requires trying BOTH modes)
+  if (shouldSave) {
+    checkModeSwitchAchievement(newMode);
+  }
 }
 
 // ==================
@@ -464,6 +832,9 @@ function updateResult() {
     setTimeout(() => resultBlob.classList.remove("confetti"), 1000);
   }
 
+  // Check achievements
+  checkAchievements(result.name, current.length);
+
   // Screen Reader Announcement
   let announcement = "";
   if (current.length === 0) {
@@ -479,6 +850,9 @@ function updateResult() {
   // Check for challenge mode win
   // Check Challenge Mode
   checkChallenge(result.name);
+
+  // Check Learning Progress
+  checkLearnProgress(result.name, activeColors);
 }
 
 // Copy HEX to clipboard
@@ -604,3 +978,130 @@ function setupKeyboardShortcuts() {
 // Initialize on load
 init();
 setupKeyboardShortcuts();
+
+// ==================
+// ACHIEVEMENT SYSTEM
+// ==================
+
+function unlockAchievement(id) {
+  // Check if already unlocked
+  if (unlockedAchievements.includes(id)) return;
+  
+  // Find achievement definition
+  const achievement = achievementDefs.find(a => a.id === id);
+  if (!achievement) return;
+  
+  // Unlock it
+  unlockedAchievements.push(id);
+  localStorage.setItem('achievements', JSON.stringify(unlockedAchievements));
+  
+  // Show toast and play sound
+  showAchievementToast(achievement);
+  playAchievementSound();
+}
+
+function showAchievementToast(achievement) {
+  // Create toast element
+  const toast = document.createElement('div');
+  toast.className = 'achievement-toast';
+  toast.innerHTML = `
+    <span class="achievement-icon">${achievement.icon}</span>
+    <div class="achievement-text">
+      <strong>Achievement Unlocked!</strong>
+      <span>${achievement.name}</span>
+    </div>
+  `;
+  
+  // Add to body
+  document.body.appendChild(toast);
+  
+  // Screen reader announcement
+  srAnnouncer.textContent = `Achievement unlocked: ${achievement.name}. ${achievement.desc}`;
+  
+  // Auto-remove after animation
+  setTimeout(() => toast.remove(), 3500);
+}
+
+function playAchievementSound() {
+  if (!isSoundEnabled) return;
+  initAudio();
+
+  const now = audioCtx.currentTime;
+  // Cheerful ascending arpeggio
+  const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+
+  notes.forEach((freq, i) => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(freq, now + i * 0.08);
+    
+    gain.gain.setValueAtTime(0.15, now + i * 0.08);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.08 + 0.2);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now + i * 0.08);
+    osc.stop(now + i * 0.08 + 0.2);
+  });
+}
+
+function saveAchievementStats() {
+  localStorage.setItem('achievementStats', JSON.stringify(achievementStats));
+}
+
+function checkAchievements(resultName, activeColorCount) {
+  // First Mix: Mix any two colors
+  if (activeColorCount >= 2 && !unlockedAchievements.includes('first_mix')) {
+    achievementStats.mixCount++;
+    saveAchievementStats();
+    unlockAchievement('first_mix');
+  }
+  
+  // Color Expert: Discover all secondary colors
+  const secondaries = ['Orange', 'Purple', 'Green', 'Yellow', 'Magenta', 'Cyan'];
+  if (secondaries.includes(resultName) && !achievementStats.secondariesFound.includes(resultName)) {
+    achievementStats.secondariesFound.push(resultName);
+    saveAchievementStats();
+    
+    // Check if all 6 discovered (3 RYB + 3 RGB)
+    if (achievementStats.secondariesFound.length >= 6) {
+      unlockAchievement('color_expert');
+    }
+  }
+}
+
+function checkModeSwitchAchievement(newMode) {
+  if (!achievementStats.modesSwitched.includes(newMode)) {
+    achievementStats.modesSwitched.push(newMode);
+    saveAchievementStats();
+    
+    // Both modes tried?
+    if (achievementStats.modesSwitched.includes('RYB') && achievementStats.modesSwitched.includes('RGB')) {
+      unlockAchievement('mode_switcher');
+    }
+  }
+}
+
+function checkChallengeWinAchievement() {
+  achievementStats.challengeWinsTotal++;
+  saveAchievementStats();
+  
+  if (achievementStats.challengeWinsTotal >= 5) {
+    unlockAchievement('champion');
+  }
+}
+
+// ==================
+// SERVICE WORKER REGISTRATION
+// ==================
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then((reg) => console.log('Service worker registered.', reg))
+      .catch((err) => console.log('Service worker registration failed.', err));
+  });
+}
