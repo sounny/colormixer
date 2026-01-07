@@ -363,6 +363,54 @@
         background: rgba(46, 204, 64, 0.3) !important;
       }
 
+      /* Share Link Button */
+      .share-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        margin-top: 0.5rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: all var(--transition-fast) ease;
+        z-index: 1;
+      }
+
+      body.paint-mode .share-btn {
+        background: rgba(0, 0, 0, 0.1);
+        color: inherit;
+      }
+
+      body.paint-mode .share-btn:hover {
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      body.light-mode .share-btn {
+        background: rgba(255, 255, 255, 0.15);
+        color: inherit;
+      }
+
+      body.light-mode .share-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+      }
+
+      .share-btn:active {
+        transform: scale(0.95);
+      }
+
+      .share-btn .share-icon {
+        width: 12px;
+        height: 12px;
+        opacity: 0.7;
+      }
+
+      .share-btn.copied {
+        background: rgba(46, 204, 64, 0.3) !important;
+      }
+
       /* Equation Display */
       .equation-container {
         height: 3rem;
@@ -1052,6 +1100,14 @@
             </svg>
             <span id="hex-text">#FFFFFF</span>
           </button>
+          <button class="share-btn" id="share-btn" onclick="shareLink()" aria-label="Share this color mix">
+            <svg class="share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+              <polyline points="16,6 12,2 8,6"/>
+              <line x1="12" y1="2" x2="12" y2="15"/>
+            </svg>
+            Share Link
+          </button>
         </div>
       </div>
 
@@ -1154,6 +1210,7 @@
       const shineEffect = document.getElementById("shine-effect");
       const hexDisplay = document.getElementById("hex-display");
       const hexText = document.getElementById("hex-text");
+      const shareBtn = document.getElementById("share-btn");
       const srAnnouncer = document.getElementById("sr-announcer");
       
       // Challenge & Accessibility DOM
@@ -1819,6 +1876,64 @@
           hexText.textContent = "Copy failed";
           setTimeout(() => {
             hexText.textContent = hex;
+          }, 1500);
+        });
+      }
+
+      // Share Link
+      function shareLink() {
+        const baseUrl = window.location.origin + window.location.pathname;
+        const params = new URLSearchParams();
+        params.set('mode', mode);
+        if (activeColors.length > 0) {
+          params.set('colors', activeColors.join(','));
+        }
+        const shareUrl = baseUrl + '?' + params.toString();
+        
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          // Visual feedback
+          shareBtn.classList.add("copied");
+          const originalText = shareBtn.textContent;
+          shareBtn.innerHTML = `
+            <svg class="share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+              <polyline points="16,6 12,2 8,6"/>
+              <line x1="12" y1="2" x2="12" y2="15"/>
+            </svg>
+            Copied!
+          `;
+          
+          setTimeout(() => {
+            shareBtn.classList.remove("copied");
+            shareBtn.innerHTML = `
+              <svg class="share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                <polyline points="16,6 12,2 8,6"/>
+                <line x1="12" y1="2" x2="12" y2="15"/>
+              </svg>
+              Share Link
+            `;
+          }, 1500);
+        }).catch(err => {
+          console.error("Failed to copy share link: ", err);
+          // Fallback feedback
+          shareBtn.innerHTML = `
+            <svg class="share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+              <polyline points="16,6 12,2 8,6"/>
+              <line x1="12" y1="2" x2="12" y2="15"/>
+            </svg>
+            Failed
+          `;
+          setTimeout(() => {
+            shareBtn.innerHTML = `
+              <svg class="share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                <polyline points="16,6 12,2 8,6"/>
+                <line x1="12" y1="2" x2="12" y2="15"/>
+              </svg>
+              Share Link
+            `;
           }, 1500);
         });
       }
