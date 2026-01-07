@@ -391,163 +391,31 @@ function updateTooltip(colorName) {
 // Update the result display based on active colors
 function updateResult() {
   const current = [...activeColors].sort();
-  let result = {
-    name: "White",
-    hex: "#FFFFFF",
-    text: "black",
-    glow: false,
-  };
-  let equation = "Pick a color to start";
+  const key = current.join(",");
 
-  // Default state (Empty)
-  if (current.length === 0) {
-    if (mode === "RYB") {
-      result = {
-        name: "White",
-        hex: "#FFFFFF",
-        text: "black",
-        glow: false,
-      };
-    } else {
-      result = {
-        name: "Black",
-        hex: "#000000",
-        text: "white",
-        glow: false,
-      };
-    }
-    equation = "Pick a color to start";
-  }
-  // PAINT MODE (RYB)
-  else if (mode === "RYB") {
-    if (current.length === 1) {
-      const color = current[0];
-      if (color === "red") {
-        result = {
-          name: "Red",
-          hex: "#FF4136",
-          text: "white",
-          glow: false,
-        };
-        equation = "Selected Red.";
-      } else if (color === "blue") {
-        result = {
-          name: "Blue",
-          hex: "#0074D9",
-          text: "white",
-          glow: false,
-        };
-        equation = "Selected Blue.";
-      } else if (color === "yellow") {
-        result = {
-          name: "Yellow",
-          hex: "#FFDC00",
+  // Look up the result from the mixing table
+  const lookup = mixingTable[mode][key];
+
+  // Default fallback (should not happen with valid inputs)
+  const defaultResult =
+    mode === "RYB"
+      ? {
+          name: "White",
+          hex: "#FFFFFF",
           text: "black",
           glow: false,
-        };
-        equation = "Selected Yellow.";
-      }
-    } else if (current.length === 2) {
-      if (current.includes("blue") && current.includes("red")) {
-        result = {
-          name: "Purple",
-          hex: "#B10DC9",
+          equation: "Pick a color to start",
+        }
+      : {
+          name: "Black",
+          hex: "#000000",
           text: "white",
           glow: false,
+          equation: "Pick a color to start",
         };
-        equation = "Mixed Red and Blue. Result is Purple.";
-      } else if (current.includes("blue") && current.includes("yellow")) {
-        result = {
-          name: "Green",
-          hex: "#2ECC40",
-          text: "white",
-          glow: false,
-        };
-        equation = "Mixed Blue and Yellow. Result is Green.";
-      } else if (current.includes("red") && current.includes("yellow")) {
-        result = {
-          name: "Orange",
-          hex: "#FF851B",
-          text: "black",
-          glow: false,
-        };
-        equation = "Mixed Red and Yellow. Result is Orange.";
-      }
-    } else if (current.length === 3) {
-      result = {
-        name: "Brown",
-        hex: "#5b3c11",
-        text: "white",
-        glow: false,
-      };
-      equation = "Mixed Red, Yellow, and Blue. Result is Brown.";
-    }
-  }
-  // LIGHT MODE (RGB)
-  else {
-    if (current.length === 1) {
-      const color = current[0];
-      if (color === "red") {
-        result = {
-          name: "Red",
-          hex: "#FF0000",
-          text: "white",
-          glow: true,
-        };
-        equation = "Selected Red Light.";
-      } else if (color === "blue") {
-        result = {
-          name: "Blue",
-          hex: "#0000FF",
-          text: "white",
-          glow: true,
-        };
-        equation = "Selected Blue Light.";
-      } else if (color === "green") {
-        result = {
-          name: "Green",
-          hex: "#00FF00",
-          text: "black",
-          glow: true,
-        };
-        equation = "Selected Green Light.";
-      }
-    } else if (current.length === 2) {
-      if (current.includes("red") && current.includes("green")) {
-        result = {
-          name: "Yellow",
-          hex: "#FFFF00",
-          text: "black",
-          glow: true,
-        };
-        equation = "Mixed Red and Green. Result is Yellow.";
-      } else if (current.includes("red") && current.includes("blue")) {
-        result = {
-          name: "Magenta",
-          hex: "#FF00FF",
-          text: "white",
-          glow: true,
-        };
-        equation = "Mixed Red and Blue. Result is Magenta.";
-      } else if (current.includes("green") && current.includes("blue")) {
-        result = {
-          name: "Cyan",
-          hex: "#00FFFF",
-          text: "black",
-          glow: true,
-        };
-        equation = "Mixed Green and Blue. Result is Cyan.";
-      }
-    } else if (current.length === 3) {
-      result = {
-        name: "White",
-        hex: "#FFFFFF",
-        text: "black",
-        glow: true,
-      };
-      equation = "Mixed Red, Green, and Blue. Result is White.";
-    }
-  }
+
+  const result = lookup || defaultResult;
+  const equation = result.equation;
 
   // Apply result to DOM
   resultBlob.style.backgroundColor = result.hex;
@@ -556,20 +424,21 @@ function updateResult() {
   equationText.textContent = equation;
 
   // Update examples
-  examples.textContent = `Examples: ${colorExamples[result.name] || "various objects"}`;
-  
+  examples.textContent = `Examples: ${
+    colorExamples[result.name] || "various objects"
+  }`;
+
   // Update tooltip content
   updateTooltip(result.name);
 
   // Apply Accessibility Patterns to Result Blob
-  let existingOverlays = resultBlob.querySelectorAll('.pattern-overlay');
-  existingOverlays.forEach(el => el.remove());
-  
+  let existingOverlays = resultBlob.querySelectorAll(".pattern-overlay");
+  existingOverlays.forEach((el) => el.remove());
+
   if (isAccessibilityMode) {
-    activeColors.forEach(color => {
-      const overlay = document.createElement('div');
+    activeColors.forEach((color) => {
+      const overlay = document.createElement("div");
       overlay.className = `pattern-overlay pattern-${color}`;
-      // Adjust opacity for mixed colors to stay legible
       overlay.style.opacity = activeColors.length > 1 ? "0.15" : "0.25";
       resultBlob.appendChild(overlay);
     });
@@ -591,8 +460,8 @@ function updateResult() {
 
   // Confetti for successful mixes
   if (current.length > 1) {
-    resultBlob.classList.add('confetti');
-    setTimeout(() => resultBlob.classList.remove('confetti'), 1000);
+    resultBlob.classList.add("confetti");
+    setTimeout(() => resultBlob.classList.remove("confetti"), 1000);
   }
 
   // Screen Reader Announcement
@@ -600,10 +469,15 @@ function updateResult() {
   if (current.length === 0) {
     announcement = `No colors selected. Canvas is ${result.name}.`;
   } else {
-    const joinedColors = current.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(" and ");
+    const joinedColors = current
+      .map((c) => c.charAt(0).toUpperCase() + c.slice(1))
+      .join(" and ");
     announcement = `Mixed ${joinedColors}. Result is ${result.name}.`;
   }
   srAnnouncer.textContent = announcement;
+
+  // Check for challenge mode win
+  checkChallenge(result.name);
 }
 
 // Copy HEX to clipboard
