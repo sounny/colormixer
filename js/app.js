@@ -160,7 +160,8 @@ function init() {
   const embedColors = urlParams.get('colors');
   if (embedColors) {
     const colorsArray = embedColors.split(',').map(c => c.trim().toLowerCase());
-    activeColors = colorsArray.filter(c => ['red', 'yellow', 'blue', 'green'].includes(c));
+    const allowedColors = mode === "RYB" ? ["red", "yellow", "blue"] : ["red", "green", "blue"];
+    activeColors = [...new Set(colorsArray.filter(c => allowedColors.includes(c)))];
   }
 
   // Apply mode and render
