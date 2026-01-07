@@ -37,7 +37,9 @@ function toggleChallengeMode() {
 
 function toggleAccessibilityMode() {
   isAccessibilityMode = !isAccessibilityMode;
-  localStorage.setItem("accessibilityMode", isAccessibilityMode);
+  try {
+    localStorage.setItem("accessibilityMode", isAccessibilityMode);
+  } catch (e) { console.warn("LocalStorage access denied"); }
   
   if (isAccessibilityMode) {
     body.classList.add('accessibility-mode');
@@ -55,7 +57,9 @@ function toggleAccessibilityMode() {
 
 function toggleHighContrastMode() {
   isHighContrastMode = !isHighContrastMode;
-  localStorage.setItem("highContrastMode", isHighContrastMode);
+  try {
+    localStorage.setItem("highContrastMode", isHighContrastMode);
+  } catch (e) { console.warn("LocalStorage access denied"); }
   
   if (isHighContrastMode) {
     body.classList.add('high-contrast-mode');
@@ -151,10 +155,12 @@ function init() {
     mode = embedMode;
   } else {
     // Load saved mode if available
-    const savedMode = localStorage.getItem("colorMixerMode");
-    if (savedMode && (savedMode === "RYB" || savedMode === "RGB")) {
-      mode = savedMode;
-    }
+    try {
+      const savedMode = localStorage.getItem("colorMixerMode");
+      if (savedMode && (savedMode === "RYB" || savedMode === "RGB")) {
+        mode = savedMode;
+      }
+    } catch (e) { console.warn("LocalStorage access denied"); }
   }
 
   const embedColors = urlParams.get('colors');
@@ -188,29 +194,35 @@ function init() {
   updateResult();
 
   // Load saved accessibility preference
-  const savedAccessibility = localStorage.getItem("accessibilityMode");
-  if (savedAccessibility === "true") {
-    isAccessibilityMode = true;
-    body.classList.add('accessibility-mode');
-    accessibilityBtn.classList.add('active');
-    accessibilityBtn.setAttribute('aria-pressed', 'true');
-    renderColorButtons();
-    updateResult();
-  }
+  try {
+    const savedAccessibility = localStorage.getItem("accessibilityMode");
+    if (savedAccessibility === "true") {
+      isAccessibilityMode = true;
+      body.classList.add('accessibility-mode');
+      accessibilityBtn.classList.add('active');
+      accessibilityBtn.setAttribute('aria-pressed', 'true');
+      renderColorButtons();
+      updateResult();
+    }
+  } catch (e) { console.warn("LocalStorage access denied"); }
 
   // Load saved high contrast preference
-  const savedHighContrast = localStorage.getItem("highContrastMode");
-  if (savedHighContrast === "true") {
-    isHighContrastMode = true;
-    body.classList.add('high-contrast-mode');
-    highContrastBtn.classList.add('active');
-    highContrastBtn.setAttribute('aria-pressed', 'true');
-  }
+  try {
+    const savedHighContrast = localStorage.getItem("highContrastMode");
+    if (savedHighContrast === "true") {
+      isHighContrastMode = true;
+      body.classList.add('high-contrast-mode');
+      highContrastBtn.classList.add('active');
+      highContrastBtn.setAttribute('aria-pressed', 'true');
+    }
+  } catch (e) { console.warn("LocalStorage access denied"); }
 
   // Show tutorial if not shown before
-  if (!localStorage.getItem('tutorialShown')) {
-    setTimeout(showTutorial, 500); // Delay to let page load
-  }
+  try {
+    if (!localStorage.getItem('tutorialShown')) {
+      setTimeout(showTutorial, 500); // Delay to let page load
+    }
+  } catch (e) { console.warn("LocalStorage access denied"); }
 
   // Tutorial event listeners
   tutorialNext.addEventListener('click', nextTutorial);
@@ -277,7 +289,9 @@ function switchMode(newMode, shouldSave = true) {
   activeColors = []; // Clear to avoid confusion
 
   if (shouldSave) {
-    localStorage.setItem("colorMixerMode", mode);
+    try {
+      localStorage.setItem("colorMixerMode", mode);
+    } catch (e) { console.warn("LocalStorage access denied"); }
   }
 
   if (mode === "RYB") {
@@ -360,7 +374,9 @@ function hideTutorial() {
   tutorialBackdrop.style.display = "none";
   clearTutorialHighlight();
   tutorialNext.textContent = "Next";
-  localStorage.setItem("tutorialShown", "true");
+  try {
+    localStorage.setItem("tutorialShown", "true");
+  } catch (e) { console.warn("LocalStorage access denied"); }
 }
 
 // ==================
