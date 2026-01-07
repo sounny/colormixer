@@ -933,18 +933,29 @@
         opacity: 0.6;
       }
 
-      /* Tutorial Modal */
-      .modal {
+      /* Tutorial Overlay */
+      .tutorial-backdrop {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        display: none;
+      }
+
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 1000;
+        z-index: 1002;
+        pointer-events: none;
       }
 
       .modal-content {
@@ -954,6 +965,8 @@
         max-width: 400px;
         text-align: center;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        pointer-events: auto;
+        position: relative;
       }
 
       body.light-mode .modal-content {
@@ -991,6 +1004,23 @@
 
       .modal button:hover {
         background: #e63946;
+      }
+
+      .tutorial-highlight {
+        position: relative;
+        z-index: 1001;
+        border-radius: 12px;
+        box-shadow:
+          0 0 0 4px rgba(251, 191, 36, 0.95),
+          0 0 0 10px rgba(0, 0, 0, 0.35);
+      }
+
+      .tutorial-highlight.tutorial-pill {
+        border-radius: 9999px;
+      }
+
+      .tutorial-highlight.tutorial-round {
+        border-radius: 9999px;
       }
 
       /* ==================
@@ -1106,7 +1136,7 @@
         }
       }
 
-    </style>
+    <!-- CSS_REPLACEMENT_END -->
   </head>
   <body class="paint-mode">
     <!-- Header -->
@@ -1138,7 +1168,7 @@
     </header>
 
     <!-- Mode Switcher -->
-    <div class="mode-switcher">
+    <div class="mode-switcher" id="mode-switcher">
       <button
         class="mode-btn paint-btn"
         id="paint-mode-btn"
@@ -1338,6 +1368,7 @@
       const successMessage = document.getElementById("success-message");
 
       // Tutorial DOM
+      const tutorialBackdrop = document.getElementById("tutorial-backdrop");
       const tutorialModal = document.getElementById("tutorial-modal");
       const tutorialText = document.getElementById("tutorial-text");
       const tutorialNext = document.getElementById("tutorial-next");
@@ -1417,12 +1448,13 @@
 
       // Tutorial variables
       let tutorialStep = 0;
+      let currentTutorialTarget = null;
       const tutorialSteps = [
-        "Step 1: Click a color button to start mixing.",
-        "Step 2: Try switching between Paint and Light modes.",
-        "Step 3: Mix two colors to see the result!",
-        "Step 4: Copy the HEX code to your clipboard.",
-        "Tutorial complete! Enjoy mixing colors!"
+        { text: "Step 1: Click a color button to start mixing.", target: "#color-buttons" },
+        { text: "Step 2: Try switching between Paint and Light modes.", target: "#mode-switcher", shape: "pill" },
+        { text: "Step 3: Mix two colors to see the result!", target: "#result-blob", shape: "round" },
+        { text: "Step 4: Copy the HEX code to your clipboard.", target: "#hex-display" },
+        { text: "Tutorial complete! Enjoy mixing colors!" }
       ];
 
       // ==================
@@ -1642,6 +1674,7 @@
         // Tutorial event listeners
         tutorialNext.addEventListener('click', nextTutorial);
         tutorialSkip.addEventListener('click', skipTutorial);
+        tutorialBackdrop.addEventListener('click', skipTutorial);
       }
 
       // Render color buttons based on mode
@@ -1736,22 +1769,45 @@
       // TUTORIAL LOGIC
       // ==================
 
+      function clearTutorialHighlight() {
+        if (!currentTutorialTarget) return;
+        currentTutorialTarget.classList.remove("tutorial-highlight", "tutorial-pill", "tutorial-round");
+        currentTutorialTarget = null;
+      }
+
+      function applyTutorialStep() {
+        const step = tutorialSteps[tutorialStep];
+        tutorialText.textContent = step.text;
+        tutorialNext.textContent = tutorialStep === tutorialSteps.length - 1 ? "Finish" : "Next";
+        clearTutorialHighlight();
+
+        if (step.target) {
+          const targetEl = document.querySelector(step.target);
+          if (targetEl) {
+            targetEl.classList.add("tutorial-highlight");
+            if (step.shape === "pill") targetEl.classList.add("tutorial-pill");
+            if (step.shape === "round") targetEl.classList.add("tutorial-round");
+            currentTutorialTarget = targetEl;
+            targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        }
+      }
+
       function showTutorial() {
         tutorialStep = 0;
-        tutorialText.textContent = tutorialSteps[tutorialStep];
-        tutorialModal.style.display = 'flex';
+        tutorialBackdrop.style.display = "block";
+        tutorialModal.style.display = "flex";
+        applyTutorialStep();
+        tutorialNext.focus();
       }
 
       function nextTutorial() {
         tutorialStep++;
         if (tutorialStep < tutorialSteps.length) {
-          tutorialText.textContent = tutorialSteps[tutorialStep];
-          if (tutorialStep === tutorialSteps.length - 1) {
-            tutorialNext.textContent = 'Finish';
-          }
-        } else {
-          hideTutorial();
+          applyTutorialStep();
+          return;
         }
+        hideTutorial();
       }
 
       function skipTutorial() {
@@ -1759,8 +1815,11 @@
       }
 
       function hideTutorial() {
-        tutorialModal.style.display = 'none';
-        localStorage.setItem('tutorialShown', 'true');
+        tutorialModal.style.display = "none";
+        tutorialBackdrop.style.display = "none";
+        clearTutorialHighlight();
+        tutorialNext.textContent = "Next";
+        localStorage.setItem("tutorialShown", "true");
       }
 
       // ==================
@@ -2094,6 +2153,7 @@
         document.addEventListener('keydown', (e) => {
           // Ignore if user is typing in an input field
           if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+          if (tutorialModal.style.display === "flex") return;
           
           const key = e.key.toLowerCase();
           
@@ -2130,12 +2190,13 @@
     </script>
 
     <!-- Tutorial Modal -->
-    <div id="tutorial-modal" class="modal" style="display: none;">
+    <div id="tutorial-backdrop" class="tutorial-backdrop" style="display: none;"></div>
+    <div id="tutorial-modal" class="modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="tutorial-title" aria-describedby="tutorial-text">
       <div class="modal-content">
-        <h2>Welcome to Color Mixer!</h2>
+        <h2 id="tutorial-title">Welcome to Color Mixer!</h2>
         <p id="tutorial-text">Step 1: Click a color button to start mixing.</p>
         <button id="tutorial-next">Next</button>
-        <button id="tutorial-skip">Skip Tutorial</button>
+        <button id="tutorial-skip" type="button">Skip Tutorial</button>
       </div>
     </div>
   </body>
