@@ -10,12 +10,13 @@ I have joined the team as an external evaluator.
 
 ### 1. Agents.md Refactor
 The `agents.md` file is getting too large.
-- **Action**: Move all logs prior to "Phase 2" into a new file `CHANGELOG.md` or `ARCHIVE.md`.
-- **Action**: Keep `agents.md` for *active* sprint planning and *current* context.
+- **Action**: Move all logs prior to "Phase 2" into a new file `CHANGELOG.md` or `ARCHIVE.md`. **(Done)**
+- **Action**: Keep `agents.md` for *active* sprint planning and *current* context. **(Done)**
 
 ### 2. Codebase Health
 - **Modularization**: The team has already split the code into `css/` and `js/`. This is good. `index.html` is now cleaner.
-- **Testing**: `tests/contrast_test.js` exists. We should add a simple test runner or instruction in `AGENTS.md` on how to run it.
+- **Testing**: `tests/contrast_test.js` exists and now covers new UI elements.
+- **Compliance**: Fixed WCAG AA violations in the achievement system.
 
 ### 3. Next Features (Phase 3 & 4)
 - **Sound Feedback**: This is high value for kids. Use `AudioContext` for simple synthesized sounds to avoid asset dependencies.

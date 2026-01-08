@@ -1182,7 +1182,8 @@ body.light-mode .tooltip-content::after {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  /* Darkened green for better contrast (WCAG AA - requires >4.5:1) */
+  background: linear-gradient(135deg, #047857 0%, #065f46 100%);
   color: white;
   padding: 16px 20px;
   border-radius: 16px;
@@ -1262,6 +1263,7 @@ body.light-mode .tooltip-content::after {
 
 /* Dark mode / Light mode variants */
 body.light-mode .achievement-toast {
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  /* Darkened blue for better contrast (WCAG AA) */
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
   box-shadow: 0 10px 40px rgba(59, 130, 246, 0.5);
 }

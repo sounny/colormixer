@@ -60,18 +60,22 @@ try {
         { bg: 'paint-bg', fg: 'paint-text-muted', name: 'Paint Mode: Background vs Muted (Footer)' },
         { bg: 'light-bg', fg: 'light-text-primary', name: 'Light Mode: Background vs Primary Text' },
         { bg: 'light-card', fg: 'light-text-primary', name: 'Light Mode: Card vs Primary Text' },
-        { bg: 'light-bg', fg: 'light-text-muted', name: 'Light Mode: Background vs Muted (Footer)' }
+        { bg: 'light-bg', fg: 'light-text-muted', name: 'Light Mode: Background vs Muted (Footer)' },
+        // Achievement Toast Colors (Hardcoded in CSS, so adding manual checks here)
+        // Updated to darker values for WCAG AA
+        { bg: '#047857', fg: '#ffffff', name: 'Achievement Toast (Green) vs White Text' },
+        { bg: '#2563eb', fg: '#ffffff', name: 'Achievement Toast (Blue) vs White Text' }
     ];
 
     let allPass = true;
     console.log('Running Contrast Ratio Tests (Target: AA >= 4.5:1)\n');
 
     pairs.forEach(pair => {
-        const bgHex = vars[pair.bg];
-        const fgHex = vars[pair.fg];
+        let bgHex = pair.bg.startsWith('#') ? pair.bg : vars[pair.bg];
+        let fgHex = pair.fg.startsWith('#') ? pair.fg : vars[pair.fg];
 
         if (!bgHex || !fgHex) {
-            console.error(`❌ [${pair.name}] Missing color variables: --${pair.bg} or --${pair.fg}`);
+            console.error(`❌ [${pair.name}] Missing color variables: ${pair.bg} or ${pair.fg}`);
             allPass = false;
             return;
         }
