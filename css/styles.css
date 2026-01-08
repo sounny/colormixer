@@ -472,6 +472,19 @@ body.light-mode .color-btn.active {
   text-transform: capitalize;
 }
 
+.active-count {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  margin-left: 4px;
+}
+
+body.light-mode .active-count {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+
 .color-btn-label.dark-text {
   color: #1e293b;
 }
@@ -540,6 +553,94 @@ body.light-mode .reset-btn:hover {
 .reset-icon {
   width: 20px;
   height: 20px;
+}
+
+/* ====================
+   Sprint 6: Deep Color
+   ==================== */
+
+.deep-color-controls {
+  width: 100%;
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 1rem;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .deep-color-controls {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.control-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  color: inherit;
+  opacity: 0.8;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(to right, #000, var(--primary-color, #3b82f6), #fff);
+  outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #3b82f6;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  font-weight: 600;
+  opacity: 0.6;
+}
+
+.color-wheel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.color-wheel {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: conic-gradient(red, yellow, lime, cyan, blue, magenta, red);
+  border: 4px solid white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.harmony-text {
+  font-size: 0.8rem;
+  font-style: italic;
+  opacity: 0.7;
 }
 
 /* Footer */
@@ -1267,3 +1368,203 @@ body.light-mode .achievement-toast {
   background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
   box-shadow: 0 10px 40px rgba(59, 130, 246, 0.5);
 }
+
+/* --- ACHIEVEMENT GALLERY --- */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+@media (min-width: 640px) {
+  .achievements-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.achievement-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background: #f8fafc;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.achievement-item.locked {
+  opacity: 0.5;
+  filter: grayscale(1);
+  background: #f1f5f9;
+}
+
+.achievement-item.unlocked {
+  background: white;
+  border-color: #3b82f6;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.achievement-item-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.achievement-item-name {
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #1e293b;
+}
+
+.achievement-item-desc {
+  font-size: 0.75rem;
+  color: #64748b;
+  line-height: 1.2;
+}
+
+#achievements-close {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: #3b82f6;
+  color: white;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#achievements-close:hover {
+  background: #2563eb;
+}
+
+.secondary-btn {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: #f1f5f9;
+  color: #475569;
+  font-weight: 700;
+  border: 2px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.secondary-btn:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+/* Dark mode adjustments */
+body.light-mode .achievement-item.unlocked {
+  background: #1e293b;
+  color: white;
+  border-color: #3b82f6;
+}
+
+body.light-mode .achievement-item-name {
+  color: white;
+}
+
+body.light-mode .achievement-item-desc {
+  color: #94a3b8;
+}
+
+body.light-mode .achievement-item.locked {
+  background: #334155;
+}
+
+/* ====================
+   Language Selector
+   ==================== */
+
+.language-selector {
+  position: relative;
+  margin-top: 0.75rem;
+}
+
+.lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lang-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+body.light-mode .lang-btn {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--light-text-secondary);
+}
+
+body.light-mode .lang-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.lang-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 0.5rem;
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  z-index: 1000;
+  min-width: 140px;
+}
+
+body.light-mode .lang-menu {
+  background: var(--light-card);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.lang-option {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: none;
+  color: #1e293b;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.lang-option:hover {
+  background: #f1f5f9;
+}
+
+body.light-mode .lang-option {
+  color: white;
+}
+
+body.light-mode .lang-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lang-option:not(:last-child) {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+body.light-mode .lang-option:not(:last-child) {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+

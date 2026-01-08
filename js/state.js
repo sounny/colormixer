@@ -17,6 +17,7 @@ let challengeLevel = 1; // 1=Easy, 2=Medium, 3=Hard, 4=Expert
 let challengeWins = 0;
 let totalWins = 0;
 let currentTarget = null; // { name: 'Purple', hex: '...' }
+let colorValue = 100; // 0=Black, 100=Pure, 200=White
 
 // Achievements State
 let unlockedAchievements = JSON.parse(localStorage.getItem('achievements')) || [];
@@ -85,6 +86,19 @@ const tutorialModal = document.getElementById("tutorial-modal");
 const tutorialText = document.getElementById("tutorial-text");
 const tutorialNext = document.getElementById("tutorial-next");
 const tutorialSkip = document.getElementById("tutorial-skip");
+
+// Achievements Modal DOM
+const achievementsBtn = document.getElementById("achievements-gallery-btn");
+const achievementsModal = document.getElementById("achievements-modal");
+const achievementsList = document.getElementById("achievements-list");
+const achievementsClose = document.getElementById("achievements-close");
+
+// Deep Color DOM
+const wheelBtn = document.getElementById("wheel-toggle-btn");
+const valueSlider = document.getElementById("value-slider");
+const valueDisplay = document.getElementById("value-display");
+const colorWheelContainer = document.getElementById("color-wheel-container");
+const harmonyText = document.getElementById("harmony-text");
 
 // ==================
 // ICONS & COLORS
@@ -212,6 +226,49 @@ const mixingTable = {
       glow: false,
       equation: "Mixed Red and Yellow. Result is Orange.",
     },
+    // Tertiary Colors (RYB)
+    "red,red,yellow": {
+      name: "Vermilion (Red-Orange)",
+      hex: "#FF4136",
+      text: "white",
+      glow: false,
+      equation: "More Red than Yellow makes Vermilion.",
+    },
+    "red,yellow,yellow": {
+      name: "Amber (Yellow-Orange)",
+      hex: "#FFB700",
+      text: "black",
+      glow: false,
+      equation: "More Yellow than Red makes Amber.",
+    },
+    "blue,yellow,yellow": {
+      name: "Chartreuse (Yellow-Green)",
+      hex: "#7FFF00",
+      text: "black",
+      glow: false,
+      equation: "More Yellow than Blue makes Chartreuse.",
+    },
+    "blue,blue,yellow": {
+      name: "Teal (Blue-Green)",
+      hex: "#008080",
+      text: "white",
+      glow: false,
+      equation: "More Blue than Yellow makes Teal.",
+    },
+    "blue,blue,red": {
+      name: "Violet (Blue-Purple)",
+      hex: "#8A2BE2",
+      text: "white",
+      glow: false,
+      equation: "More Blue than Red makes Violet.",
+    },
+    "blue,red,red": {
+      name: "Magenta (Red-Purple)",
+      hex: "#FF00FF",
+      text: "white",
+      glow: false,
+      equation: "More Red than Blue makes Magenta.",
+    },
     // Three-color mix
     "blue,red,yellow": {
       name: "Brown",
@@ -273,6 +330,49 @@ const mixingTable = {
       text: "black",
       glow: true,
       equation: "Mixed Green and Blue. Result is Cyan.",
+    },
+    // Tertiary Colors (RGB)
+    "red,red,green": {
+      name: "Orange (Red-Yellow)",
+      hex: "#FF7F00",
+      text: "white",
+      glow: true,
+      equation: "Double Red and Green makes a warm Orange light.",
+    },
+    "green,green,red": {
+      name: "Lime (Green-Yellow)",
+      hex: "#7FFF00",
+      text: "black",
+      glow: true,
+      equation: "Double Green and Red makes Lime light.",
+    },
+    "blue,green,green": {
+      name: "Teal (Green-Cyan)",
+      hex: "#008080",
+      text: "white",
+      glow: true,
+      equation: "Double Green and Blue makes Teal light.",
+    },
+    "blue,blue,green": {
+      name: "Sky (Blue-Cyan)",
+      hex: "#007FFF",
+      text: "white",
+      glow: true,
+      equation: "Double Blue and Green makes Sky light.",
+    },
+    "blue,blue,red": {
+      name: "Violet (Blue-Magenta)",
+      hex: "#7F00FF",
+      text: "white",
+      glow: true,
+      equation: "Double Blue and Red makes Violet light.",
+    },
+    "blue,red,red": {
+      name: "Rose (Red-Magenta)",
+      hex: "#FF007F",
+      text: "white",
+      glow: true,
+      equation: "Double Red and Blue makes Rose light.",
     },
     // Three-color mix
     "blue,green,red": {
