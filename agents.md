@@ -60,6 +60,36 @@ colormixer/
 | ✅ Done | Print Worksheet | Medium | Antigravity |
 | ✅ Done | Teacher Analytics Export | Low | Antigravity |
 
+---
+
+### 2026-01-07 | Axiom Vale
+**Task**: Vision plan for next-version impact
+
+**Summary**:
+Outlined a focused, low-risk plan emphasizing reliability, onboarding polish, deeper accessibility checks, teacher-friendly embed presets, and code clarity.
+
+---
+
+### 2026-01-07 | Axiom Vale
+**Task**: Pedagogical alignment notes
+
+**Summary**:
+Added learning goals, NCAS alignment pointers, and classroom activity ideas for color mixing instruction.
+
+---
+
+### 2026-01-06 | CLI 2 (Gemini)
+**Task**: Context Sync & Roadmap Audit
+
+**Summary**: 
+Synchronized with the project state and performed an audit of `agents.md` against `index.html`.
+
+**Findings**:
+- **Challenge Mode**: Already implemented in `index.html` but marked as "Planned" in roadmap. Updated status to ✅ **Done**.
+- **Sprint 1 Status**: Identified pending P1 tasks: ARIA Live Regions and Remember Last Mode.
+- **Registration**: Added CLI 2 to the contributing agents list.
+
+**Next Step**: Implement ARIA Live Regions and localStorage persistence.
 ### Sprint 6: Deep Color ✅ COMPLETE
 | Status | Task | Owner |
 |--------|------|-------|
@@ -309,6 +339,39 @@ I've completed all my tasks for today. Here's a summary of what I've accomplishe
 - **Review and Consider Adding Badges**: Reviewed and considered adding badges to the app.
 - **Review the Work Done So Far**: Completed the review of the work done so far.
 
+### Axiom Vale Vision Plan (Next Version Focus)
+1. **Reliability First**: Add small guardrails (URL param validation, dedupe, null-safe DOM access) to prevent edge-case regressions.
+2. **Onboarding Polish**: Ensure the tutorial overlay and tooltips feel cohesive (tone, spacing, and sequence) and don’t overlap on small screens.
+3. **Accessibility Deepen**: Verify high-contrast + pattern overlays in all modes and add reduced-motion fallbacks for any new animations.
+4. **Teacher Mode**: Expand embed/share links with predictable presets and a simple “lesson card” view (no new dependencies).
+5. **Code Clarity**: Keep single-file ergonomics by grouping logic blocks and documenting new features in the Contribution Log.
+
+### Axiom Vale: Pedagogy & National Arts Standards Alignment
+**Core learning goals for color mixing (student-friendly):**
+- **Identify primary colors** and describe how they combine into secondary colors.
+- **Explain the difference** between mixing paint (subtractive/RYB) and mixing light (additive/RGB).
+- **Predict outcomes** of mixing two or three colors and verify with the mixer.
+- **Use correct vocabulary** (primary, secondary, tint, shade, hue, value, saturation).
+- **Connect color to meaning** (e.g., warm vs. cool) and communicate simple ideas with color choices.
+
+**National Core Arts Standards (NCAS) tie-ins (visual arts):**
+- **Creating (VA:Cr1/Cr2)**: Students experiment with materials and processes by mixing colors to make new hues.
+- **Presenting (VA:Pr4)**: Students explain or show their color choices and the resulting mixes.
+- **Responding (VA:Re7/Re9)**: Students interpret how color affects mood and compare results between paint vs. light.
+- **Connecting (VA:Cn10)**: Students relate color mixing to real-world contexts (design, nature, digital screens).
+
+**Quick activity ideas for classrooms:**
+- **Prediction cards**: “Red + Blue = ?” then confirm with the mixer.
+- **Mode compare**: Same two colors in Paint vs. Light—describe differences.
+- **Color story**: Choose a color mix for “happy,” “stormy,” or “mystery,” then explain why.
+- **Exit ticket**: “One thing I learned about light vs. paint mixing.”
+
+### Ideas for Future Improvements (Proposed by Gemini CLI Agent)
+1.  **Intermediate Mixing Steps**: Instead of just "Red + Blue = Purple", implementing a slider or multi-click system could allow users to see what happens with *more* red than blue (e.g., Magenta/Red-Purple vs. Violet/Blue-Purple). This would require moving from a lookup table to a calculated color blending system.
+2.  **Color Blindness Mode**: Add patterns or text labels directly on the color blobs to ensure the app is accessible to users with color vision deficiencies.
+3.  **Gamification**: A "Challenge Mode" where the app asks, "Make Green!" and the user has to select the correct combination.
+4.  **Save/Share Palette**: Allow users to "snapshot" their mixed color and save it to a list or copy the HEX code to the clipboard.
+5.  **PWA Support**: Add a manifest file and service worker so the app can be installed on mobile devices and work offline.
 Great work everyone! Let's continue making this app amazing! 🚀
 
 ### 2026-01-17 | Devstral-2
