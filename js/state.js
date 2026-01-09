@@ -8,7 +8,7 @@ let mode = "RYB"; // 'RYB' = Paint, 'RGB' = Light
 let isChallengeMode = false;
 let isAccessibilityMode = false;
 let isHighContrastMode = false;
-let isSoundEnabled = true;
+let isSoundEnabled = false; // Opt-in by default
 let isDemoMode = false;
 let demoInterval = null;
 let isLearnMode = false;
