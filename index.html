@@ -45,6 +45,46 @@
         <h1 id="header-title-text">Paint Mixer</h1>
       </div>
       <p id="header-subtitle">Mixing paint gets darker!</p>
+
+      <!-- Language Selector -->
+      <div class="language-selector" id="language-selector">
+        <button
+          class="lang-btn"
+          id="lang-toggle"
+          onclick="toggleLangMenu()"
+          aria-label="Select Language"
+          aria-expanded="false"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="2" y1="12" x2="22" y2="12" />
+            <path
+              d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+            />
+          </svg>
+          <span id="current-lang">EN</span>
+        </button>
+        <div class="lang-menu" id="lang-menu" style="display: none">
+          <button onclick="setLanguage('en')" class="lang-option">
+            🇬🇧 English
+          </button>
+          <button onclick="setLanguage('es')" class="lang-option">
+            🇪🇸 Español
+          </button>
+          <button onclick="setLanguage('fr')" class="lang-option">
+            🇫🇷 Français
+          </button>
+        </div>
+      </div>
     </header>
 
     <!-- Mode Switcher -->
@@ -66,37 +106,274 @@
     </div>
 
     <!-- Toggles Row -->
-    <div style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem;">
-    <!-- Accessibility Toggle -->
-    <button class="challenge-toggle-btn" id="accessibility-toggle-btn" onclick="toggleAccessibilityMode()" style="margin-bottom: 0.5rem;" aria-pressed="false">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
-        <circle cx="12" cy="12" r="3"/>
-      </svg>
-      <span>Accessibility</span>
-    </button>
+    <div
+      style="
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+      "
+    >
+      <!-- Accessibility Toggle -->
+      <button
+        class="challenge-toggle-btn"
+        id="accessibility-toggle-btn"
+        onclick="toggleAccessibilityMode()"
+        style="margin-bottom: 0.5rem"
+        aria-pressed="false"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        <span>Accessibility</span>
+      </button>
 
-    <!-- High Contrast Toggle -->
-    <button class="challenge-toggle-btn" id="high-contrast-toggle-btn" onclick="toggleHighContrastMode()" style="margin-bottom: 0.5rem;" aria-pressed="false">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M12 2v20M2 12h20"/>
-      </svg>
-      <span>High Contrast</span>
-    </button>
+      <!-- High Contrast Toggle -->
+      <button
+        class="challenge-toggle-btn"
+        id="high-contrast-toggle-btn"
+        onclick="toggleHighContrastMode()"
+        style="margin-bottom: 0.5rem"
+        aria-pressed="false"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 2v20M2 12h20" />
+        </svg>
+        <span>High Contrast</span>
+      </button>
 
-    <!-- Challenge Toggle -->
-    <button class="challenge-toggle-btn" id="challenge-toggle-btn" onclick="toggleChallengeMode()" style="margin-bottom: 1rem;">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
-        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
-        <path d="M4 22h16"/>
-          <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
-          <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
-          <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
-      </svg>
-      <span>Game Mode</span>
-    </button>
+      <!-- Sound Toggle -->
+      <button
+        class="challenge-toggle-btn"
+        id="sound-toggle-btn"
+        onclick="toggleSound()"
+        style="margin-bottom: 0.5rem"
+        aria-pressed="true"
+      >
+        <svg
+          id="sound-icon"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M11 5L6 9H2v6h4l5 4V5z" />
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+        </svg>
+        <span>Sound</span>
+      </button>
+
+      <!-- Challenge Toggle -->
+      <button
+        class="challenge-toggle-btn"
+        id="challenge-toggle-btn"
+        onclick="toggleChallengeMode()"
+        style="margin-bottom: 1rem"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+          <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+          <path d="M4 22h16" />
+          <path
+            d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"
+          />
+          <path
+            d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"
+          />
+          <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+        </svg>
+        <span>Game Mode</span>
+      </button>
+
+      <!-- Demo Mode Toggle -->
+      <button
+        class="challenge-toggle-btn"
+        id="demo-toggle-btn"
+        onclick="toggleDemoMode()"
+        style="margin-bottom: 1rem"
+        aria-pressed="false"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polygon points="5 3 19 12 5 21 5 3" />
+        </svg>
+        <span>Demo Mode</span>
+      </button>
+
+      <!-- Learning Path Toggle -->
+      <button
+        class="challenge-toggle-btn"
+        id="learn-toggle-btn"
+        onclick="toggleLearnMode()"
+        style="margin-bottom: 1rem"
+        aria-pressed="false"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"
+          />
+          <path
+            d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+          />
+        </svg>
+        <span>Learn</span>
+      </button>
+
+      <!-- Achievements Gallery Toggle -->
+      <button
+        class="challenge-toggle-btn"
+        id="achievements-gallery-btn"
+        onclick="toggleAchievementsModal()"
+        style="margin-bottom: 1rem"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+          <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+          <path d="M4 22h16" />
+          <path
+            d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"
+          />
+          <path
+            d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"
+          />
+          <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+        </svg>
+        <span>Badges</span>
+      </button>
+
+      <!-- Color Wheel Toggle -->
+      <button
+        class="challenge-toggle-btn"
+        id="wheel-toggle-btn"
+        onclick="toggleColorWheel()"
+        style="margin-bottom: 1rem"
+        aria-pressed="false"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 2a10 10 0 0 1 10 10" />
+        </svg>
+        <span>Harmony</span>
+      </button>
+
+      <!-- Print Worksheet -->
+      <button
+        class="challenge-toggle-btn"
+        id="print-worksheet-btn"
+        onclick="printWorksheet()"
+        style="margin-bottom: 1rem"
+        aria-label="Print color mixing worksheet"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="6 9 6 2 18 2 18 9" />
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+          <rect x="6" y="14" width="12" height="8" />
+        </svg>
+        <span>Print</span>
+      </button>
+
+      <!-- Export Progress -->
+      <button
+        class="challenge-toggle-btn"
+        id="export-progress-btn"
+        onclick="exportAnalytics()"
+        style="margin-bottom: 1rem"
+        aria-label="Export student progress to CSV"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        <span>Export</span>
+      </button>
     </div>
 
     <!-- Challenge Status Bar -->
@@ -112,22 +389,55 @@
     <!-- Main Card -->
     <main class="main-card">
       <!-- Result Blob -->
-      <div class="result-blob" id="result-blob" aria-live="polite" aria-atomic="true">
+      <div
+        class="result-blob"
+        id="result-blob"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         <div class="shine" id="shine-effect"></div>
-        <div style="display: flex; flex-direction: column; align-items: center;">
+        <div style="display: flex; flex-direction: column; align-items: center">
           <span class="result-name" id="result-name">White</span>
-          <button class="hex-display" id="hex-display" onclick="copyHex()" aria-label="Copy HEX color code">
-            <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
-              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+          <button
+            class="hex-display"
+            id="hex-display"
+            onclick="copyHex()"
+            aria-label="Copy HEX color code"
+          >
+            <svg
+              class="copy-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+              <path
+                d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+              />
             </svg>
             <span id="hex-text">#FFFFFF</span>
           </button>
-          <button class="share-btn" id="share-btn" onclick="shareLink()" aria-label="Share this color mix">
-            <svg class="share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
-              <polyline points="16,6 12,2 8,6"/>
-              <line x1="12" y1="2" x2="12" y2="15"/>
+          <button
+            class="share-btn"
+            id="share-btn"
+            onclick="shareLink()"
+            aria-label="Share this color mix"
+          >
+            <svg
+              class="share-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+              <polyline points="16,6 12,2 8,6" />
+              <line x1="12" y1="2" x2="12" y2="15" />
             </svg>
             Share Link
           </button>
@@ -136,13 +446,27 @@
 
       <!-- Equation Text -->
       <div class="equation-container">
-        <p class="equation-text" id="equation-text" role="status">Pick a color to start</p>
+        <p class="equation-text" id="equation-text" role="status">
+          Pick a color to start
+        </p>
       </div>
 
       <!-- Educational Tooltip -->
       <div class="edu-tooltip-container">
-        <button id="tooltip-toggle" class="tooltip-btn" onclick="toggleTooltip()" aria-expanded="false">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button
+          id="tooltip-toggle"
+          class="tooltip-btn"
+          onclick="toggleTooltip()"
+          aria-expanded="false"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <circle cx="12" cy="12" r="10"></circle>
             <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
             <line x1="12" y1="17" x2="12.01" y2="17"></line>
@@ -156,6 +480,42 @@
 
       <!-- Real-World Examples -->
       <div class="examples" id="examples">Examples: apples, strawberries</div>
+
+      <!-- Sprint 6: Deep Color Controls -->
+      <div class="deep-color-controls">
+        <div class="control-group">
+          <label for="value-slider" class="control-label">
+            <span data-i18n="settings_value">Color Value (Tints & Shades)</span>
+            <span id="value-display">100%</span>
+          </label>
+          <input
+            type="range"
+            id="value-slider"
+            min="0"
+            max="200"
+            value="100"
+            class="slider"
+            oninput="updateValue(this.value)"
+          />
+          <div class="slider-labels">
+            <span data-i18n="value_shade">Shade (Black)</span>
+            <span data-i18n="value_pure">Pure Color</span>
+            <span data-i18n="value_tint">Tint (White)</span>
+          </div>
+        </div>
+
+        <div
+          id="color-wheel-container"
+          class="color-wheel-container"
+          style="display: none"
+        >
+          <h3 class="control-label">Color Relationships</h3>
+          <div id="color-wheel" class="color-wheel">
+            <!-- Wheel visual generated by JS/CSS -->
+          </div>
+          <p id="harmony-text" class="harmony-text">Complementary: ...</p>
+        </div>
+      </div>
 
       <!-- Color Buttons -->
       <div class="color-buttons" id="color-buttons">
@@ -187,7 +547,9 @@
     <footer class="footer" id="footer-text">
       <span id="footer-main-text">Red + Yellow + Blue = Brown Paint</span>
       <span class="keyboard-hint">
-        Keyboard: <kbd class="kbd">R</kbd><kbd class="kbd">Y</kbd><kbd class="kbd">B</kbd> colors · <kbd class="kbd">Space</kbd> reset · <kbd class="kbd">Tab</kbd> mode
+        Keyboard: <kbd class="kbd">R</kbd><kbd class="kbd">Y</kbd
+        ><kbd class="kbd">B</kbd> colors · <kbd class="kbd">Space</kbd> reset ·
+        <kbd class="kbd">Tab</kbd> mode
       </span>
     </footer>
 
@@ -197,21 +559,71 @@
         <span class="success-icon">🎉</span>
         <h2 class="success-title">You Did It!</h2>
         <p id="success-message">You made Purple!</p>
-        <button class="success-btn" onclick="nextChallenge()">Next Level</button>
+        <button class="success-btn" onclick="nextChallenge()">
+          Next Level
+        </button>
       </div>
     </div>
 
+    <script src="js/i18n.js"></script>
     <script src="js/state.js"></script>
     <script src="js/app.js"></script>
 
     <!-- Tutorial Modal -->
-    <div id="tutorial-backdrop" class="tutorial-backdrop" style="display: none;"></div>
-    <div id="tutorial-modal" class="modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="tutorial-title" aria-describedby="tutorial-text">
+    <div
+      id="tutorial-backdrop"
+      class="tutorial-backdrop"
+      style="display: none"
+    ></div>
+    <div
+      id="tutorial-modal"
+      class="modal"
+      style="display: none"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="tutorial-title"
+      aria-describedby="tutorial-text"
+    >
       <div class="modal-content">
         <h2 id="tutorial-title">Welcome to Color Mixer!</h2>
         <p id="tutorial-text">Step 1: Click a color button to start mixing.</p>
         <button id="tutorial-next">Next</button>
         <button id="tutorial-skip" type="button">Skip Tutorial</button>
+      </div>
+    </div>
+    <!-- Achievements Modal -->
+    <div
+      id="achievements-modal"
+      class="modal"
+      style="display: none"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="achievements-title"
+    >
+      <div class="modal-content">
+        <h2 id="achievements-title">Your Badges</h2>
+        <div id="achievements-list" class="achievements-grid">
+          <!-- Achievements injected by JS -->
+        </div>
+        <div
+          class="modal-actions"
+          style="display: flex; gap: 1rem; width: 100%"
+        >
+          <button
+            id="achievements-export"
+            class="secondary-btn"
+            onclick="exportReportCard()"
+          >
+            📜 Export Report Card
+          </button>
+          <button
+            id="achievements-close"
+            type="button"
+            onclick="toggleAchievementsModal()"
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
   </body>
