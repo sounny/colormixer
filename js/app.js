@@ -71,82 +71,20 @@ function toggleHighContrastMode() {
 // ==================
 // SOUND LOGIC
 // ==================
-
-let audioCtx = null;
-
-function initAudio() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-}
+// Logic moved to js/sound.js
 
 function toggleSound() {
-  isSoundEnabled = !isSoundEnabled;
-  localStorage.setItem("soundEnabled", isSoundEnabled);
-  
-  if (isSoundEnabled) {
-    soundBtn.classList.add('active');
-    soundBtn.setAttribute('aria-pressed', 'true');
-    soundIcon.innerHTML = `
-      <path d="M11 5L6 9H2v6h4l5 4V5z"/>
-      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
-      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-    `;
-  } else {
-    soundBtn.classList.remove('active');
-    soundBtn.setAttribute('aria-pressed', 'false');
-    soundIcon.innerHTML = `
-      <path d="M11 5L6 9H2v6h4l5 4V5z"/>
-      <line x1="23" y1="9" x2="17" y2="15"/>
-      <line x1="17" y1="9" x2="23" y2="15"/>
-    `;
+  if (window.SoundManager) {
+    window.SoundManager.toggle();
   }
 }
 
 function playPopSound() {
-  if (!isSoundEnabled) return;
-  initAudio();
-  
-  const oscillator = audioCtx.createOscillator();
-  const gainNode = audioCtx.createGain();
-
-  oscillator.type = 'sine';
-  oscillator.frequency.setValueAtTime(400, audioCtx.currentTime);
-  oscillator.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.1);
-
-  gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-  gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-
-  oscillator.connect(gainNode);
-  gainNode.connect(audioCtx.destination);
-
-  oscillator.start();
-  oscillator.stop(audioCtx.currentTime + 0.1);
+  SoundManager.playPop();
 }
 
 function playSuccessSound() {
-  if (!isSoundEnabled) return;
-  initAudio();
-
-  const now = audioCtx.currentTime;
-  const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
-
-  notes.forEach((freq, i) => {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(freq, now + i * 0.1);
-    
-    gain.gain.setValueAtTime(0.1, now + i * 0.1);
-    gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.3);
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc.start(now + i * 0.1);
-    osc.stop(now + i * 0.1 + 0.3);
-  });
+  SoundManager.playSuccess();
 }
 
 // ==================
@@ -1187,29 +1125,7 @@ function showAchievementToast(achievement) {
 }
 
 function playAchievementSound() {
-  if (!isSoundEnabled) return;
-  initAudio();
-
-  const now = audioCtx.currentTime;
-  // Cheerful ascending arpeggio
-  const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
-
-  notes.forEach((freq, i) => {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(freq, now + i * 0.08);
-    
-    gain.gain.setValueAtTime(0.15, now + i * 0.08);
-    gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.08 + 0.2);
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc.start(now + i * 0.08);
-    osc.stop(now + i * 0.08 + 0.2);
-  });
+  SoundManager.playAchievement();
 }
 
 function saveAchievementStats() {
