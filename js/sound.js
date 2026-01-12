@@ -70,8 +70,11 @@ window.SoundManager = (function() {
     updateUI();
 
     // Resume context if needed when enabling
-    if (isSoundEnabled && audioCtx && audioCtx.state === 'suspended') {
-      audioCtx.resume();
+    if (isSoundEnabled) {
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      playPop(); // Feedback so user knows sound is on
     }
   }
 

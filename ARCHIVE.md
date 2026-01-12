@@ -1,5 +1,15 @@
 # Archive - Contribution Log
 
+## 2026-01-08 | Jules
+**Task**: Housekeeping & Sound Architecture
+
+**Summary**:
+Refactored the sound system into a dedicated module and cleaned up project documentation.
+- **Refactor**: Moved all audio logic from `js/app.js` to `js/sound.js` (SoundManager pattern).
+- **Accessibility**: Sound now respects `prefers-reduced-motion` by default (muted if reduced motion is preferred).
+- **Housekeeping**: Archived 24 old logs to `ARCHIVE.md` to keep the active board clean.
+- **Verification**: Validated contrast ratios and sound logic state toggling.
+
 ## 2026-01-07 | Gemini CLI Agent
 **Task**: Level Up Animation & Learning Path Mode Implementation
 
@@ -8,8 +18,6 @@ Completed Task 4.3 and Task 4.4 to finalize Sprint 4.
 - **Level Up**: Added high-impact CSS animations and a "rainbow-text" effect for progression milestones.
 - **Learning Path**: Implemented a 9-step guided discovery sequence that teaches both RYB and RGB models.
 - **Integration**: Refined modal logic to handle both standard tutorials and guided lessons seamlessly.
-
----
 
 ## 2026-01-07 | Gemini CLI Agent
 **Task**: Learning Path Mode Implementation
@@ -20,8 +28,6 @@ Implemented Task 4.4 (originally Proposal 1): Learning Path Mode.
 - **Integration**: Reused the Tutorial Modal UI for a seamless instructional experience.
 - **Scaffolding**: Users are prompted to perform specific mixing actions to advance, reinforcing concepts.
 
----
-
 ## 2026-01-07 | Gemini CLI Agent
 **Task**: Level Up Animation & UI Feedback
 
@@ -30,8 +36,6 @@ Implemented Task 4.3: Level Up Animation.
 - **CSS**: Added `@keyframes level-up-glow`, `bounce-in`, and `rainbow-text` animations.
 - **Logic**: Enhanced `showSuccess` to trigger specialized animations and messages when a player levels up in Challenge Mode.
 - **Polish**: Added extra visual fanfare (double confetti + glow) for progression milestones.
-
----
 
 ## 2026-01-07 | Gemini CLI Agent
 **Task**: Simple Achievement System Implementation
@@ -43,8 +47,6 @@ Implemented Task 4.2: Simple Achievement System.
 - **Logic**: Added 4 achievements triggered by color mixing, mode switching, and challenge wins.
 - **Persistence**: Saved progress to `localStorage`.
 
----
-
 ## 2026-01-07 | Gemini CLI Agent
 **Task**: Progressive Challenge Difficulty Implementation
 
@@ -54,8 +56,6 @@ Implemented progressive difficulty logic for Challenge Mode to scaffold learning
 - **Logic**: Updated `startChallenge` to respect difficulty tiers (Primary -> Secondary -> Cross-mode).
 - **Feedback**: Added "Level Up" notification in `showSuccess`.
 - **Persistence**: Saved progress to `localStorage`.
-
----
 
 ## 2026-01-07 | Antigravity
 **Task**: Pedagogical Research & Recommendations
@@ -74,8 +74,6 @@ Conducted research on evidence-based pedagogy to improve learning outcomes. Crea
 
 **Current Score**: 8.7/10 — Excellent pedagogical foundation!
 
----
-
 ## 2026-01-07 | Gemini CLI Agent
 **Task**: PWA, Sound, and Demo Mode Implementation
 
@@ -85,8 +83,6 @@ Completed the final features for Phase 3 and 4.
 - **Sound**: Implemented `AudioContext` based sound effects (pop and success) with a mute toggle.
 - **Demo Mode**: Added an auto-cycle "Demo Mode" that showcases color mixing logic.
 - **Refactor**: Performed the `agents.md` archival to `CHANGELOG.md`.
-
----
 
 ## 2026-01-07 | Axiom Vale / Jules
 **Task**: Codebase Audit & Challenge Mode Fix
@@ -99,15 +95,11 @@ Introduced myself as the external evaluator. Identified and fixed a critical bug
 - **Cleanup**: Deleted `REFACTOR_updateResult.js` as it was a stale/abandoned refactor attempt.
 - **Verification**: Verified `agents.md` integrity (no null bytes found).
 
----
-
 ## 2026-01-07 | GitHub Copilot
 **Task**: Embed Mode & Share Links (P2 Integration)
 
 **Summary**:
 Implemented URL parameter support and shareable links for sharing specific mixes. Added `prefers-reduced-motion` and High Contrast Mode.
-
----
 
 ## 2026-01-07 | Axiom Vale
 **Task**: External evaluation kickoff & embed-mode polish
@@ -396,7 +388,7 @@ Here are some UI/UX questions that need to be considered:
 
 3. **User Feedback**: Should we implement a system for users to provide feedback and suggestions?
 
-4. **FAQ Section**: Should we add a FAQ section to address common questions and issues?
+4. **FAQ Section**: Should we offer live chat support for users who need help?
 
 5. **Live Chat Support**: Should we offer live chat support for users who need help?
 
@@ -420,5 +412,3 @@ Drafted a comprehensive guide for educators to maximize the pedagogical value of
 - **Content**: Included specific lesson plans for different grade levels (K-8).
 - **Strategy**: Documented discussion starters, pedagogical tips (scaffolding, gamification), and technical instructions for classroom setup (PWA, Embed mode).
 - **Outcome**: The app is now fully supported with classroom-ready documentation.
-
----

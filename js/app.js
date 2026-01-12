@@ -3,6 +3,7 @@
 // ==================
 
 function toggleChallengeMode() {
+  playPopSound();
   isChallengeMode = !isChallengeMode;
   
   if (isChallengeMode) {
@@ -36,6 +37,7 @@ function toggleChallengeMode() {
 }
 
 function toggleAccessibilityMode() {
+  playPopSound();
   isAccessibilityMode = !isAccessibilityMode;
   localStorage.setItem("accessibilityMode", isAccessibilityMode);
   
@@ -54,6 +56,7 @@ function toggleAccessibilityMode() {
 }
 
 function toggleHighContrastMode() {
+  playPopSound();
   isHighContrastMode = !isHighContrastMode;
   localStorage.setItem("highContrastMode", isHighContrastMode);
   
@@ -107,6 +110,7 @@ const demoSequence = [
 let demoIndex = 0;
 
 function toggleDemoMode() {
+  playPopSound();
   isDemoMode = !isDemoMode;
   
   if (isDemoMode) {
@@ -269,6 +273,7 @@ function skipChallenge() {
 // ==================
 
 function toggleLearnMode() {
+  playPopSound();
   isLearnMode = !isLearnMode;
   
   if (isLearnMode) {
@@ -385,6 +390,7 @@ function showAchievementToast(achievement) {
 }
 
 function toggleAchievementsModal() {
+  playPopSound();
   const isVisible = achievementsModal.style.display === 'flex';
   if (isVisible) {
     achievementsModal.style.display = 'none';
@@ -672,6 +678,7 @@ function getTintedColor(hex, value) {
 }
 
 function toggleColorWheel() {
+  playPopSound();
   const isVisible = colorWheelContainer.style.display === 'flex';
   if (isVisible) {
     colorWheelContainer.style.display = 'none';
@@ -1246,6 +1253,7 @@ if (typeof initI18n === 'function') {
 // ==================
 
 function printWorksheet() {
+  playPopSound();
   // Create printable worksheet content
   const worksheetHTML = `
 <!DOCTYPE html>
@@ -1527,6 +1535,7 @@ function printWorksheet() {
 // ==================
 
 function exportAnalytics() {
+  playPopSound();
   // Gather all relevant data
   const data = {
     exportDate: new Date().toISOString(),
