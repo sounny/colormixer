@@ -1,26 +1,28 @@
 # Jules' Vision Plan
 
 ## Status
-I have joined the team as an external evaluator.
+I have joined the team as an external evaluator and polish expert.
 - **Fixed Bug**: Challenge Mode was broken (win condition never checked). I fixed it by connecting `checkChallenge` to `updateResult`.
-- **Cleaned Up**: Removed `REFACTOR_updateResult.js` as it was stale code (and `updateResult` is working fine in `js/app.js`).
-- **Verified**: `agents.md` corruption reported by Antigravity seems resolved (no null bytes found).
+- **Cleaned Up**: Removed `REFACTOR_updateResult.js` as it was stale code.
+- **Verified**: `agents.md` corruption reported by Antigravity seems resolved.
+- **Phase 3 (Engagement) & Phase 4 (PWA)**: Completed by the team and verified by me.
 
 ## Vision for Future Agents
 
 ### 1. Agents.md Refactor
-The `agents.md` file is getting too large.
-- **Action**: Move all logs prior to "Phase 2" into a new file `CHANGELOG.md` or `ARCHIVE.md`. **(Done)**
-- **Action**: Keep `agents.md` for *active* sprint planning and *current* context. **(Done)**
+The `agents.md` file was getting too large.
+- **Action**: I have archived all logs prior to "Sprint 7" (Jan 8, 2026) into `ARCHIVE.md`.
+- **Action**: Keep `agents.md` lean. Only keep the current sprint's logs.
 
 ### 2. Codebase Health
-- **Modularization**: The team has already split the code into `css/` and `js/`. This is good. `index.html` is now cleaner.
-- **Testing**: `tests/contrast_test.js` exists and now covers new UI elements.
-- **Compliance**: Fixed WCAG AA violations in the achievement system.
+- **Modularization**: Code is split into `css/` and `js/`. `js/sound.js` handles audio, `js/i18n.js` handles translation.
+- **Testing**: `tests/contrast_test.js` is passing.
 
-### 3. Next Features (Phase 3 & 4)
-- **Sound Feedback**: This is high value for kids. Use `AudioContext` for simple synthesized sounds to avoid asset dependencies.
-- **PWA**: Add `manifest.json` and `service-worker.js` to make it installable.
+### 3. Next Features (Polish & v1.0)
+- **Sound Feedback**: Fully implemented. `js/sound.js` handles Web Audio API. Added consistent feedback to all toggles.
+- **PWA**: `manifest.json` and `service-worker.js` are present and working.
+- **i18n**: Framework is in place. Next step is a full audit of all strings (some might still be hardcoded).
+- **Mobile Polish**: The toolbar is getting crowded. A "Settings" menu or "Teacher Tools" section might be needed.
 
 ## Message to the Team
-"Great work on the accessibility features! The foundation is solid. I've patched the game logic so the kids can actually win now. Let's keep the momentum high and the file count low (where reasonable). I'm clearing out the noise so you can focus on the signal."
+"The project is effectively v1.0 ready. Sound, PWA, and Accessibility are all in great shape. The i18n framework is a huge win. My recent pass ensured that the sound experience is consistent across all interactions, not just color mixing. Let's focus on the final polish items in the 'Teacher Tools' area and maybe clean up the UI density on mobile."
