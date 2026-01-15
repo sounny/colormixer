@@ -56,10 +56,12 @@ window.SoundManager = (function() {
     if (isSoundEnabled) {
       soundBtn.classList.add('active');
       soundBtn.setAttribute('aria-pressed', 'true');
+      soundBtn.setAttribute('title', 'Mute Sound');
       soundIcon.innerHTML = SOUND_ON_ICON;
     } else {
       soundBtn.classList.remove('active');
       soundBtn.setAttribute('aria-pressed', 'false');
+      soundBtn.setAttribute('title', 'Enable Sound');
       soundIcon.innerHTML = SOUND_OFF_ICON;
     }
   }
