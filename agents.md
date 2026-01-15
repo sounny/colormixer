@@ -68,6 +68,15 @@ colormixer/
 
 ## Contribution Log
 
+### 2026-01-15 | Jules
+**Task**: Documentation Cleanup & Sound Polish
+
+**Summary**:
+Verified existing sound implementation and added UX polish.
+- **Sound**: Improved accessibility by adding dynamic tooltips to the sound toggle button.
+- **Verification**: Verified sound system logic and contrast ratios (All passed).
+- **Housekeeping**: Reviewed `agents.md` state (already lean).
+
 ### 2026-01-09 | Jules
 **Task**: PWA Polish & Verification
 
