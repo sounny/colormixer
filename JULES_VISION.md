@@ -20,7 +20,7 @@ The `agents.md` file was getting too large.
 
 ### 3. Next Features (Polish & v1.0)
 - **Sound Feedback**: Fully implemented. `js/sound.js` handles Web Audio API. Added consistent feedback to all toggles.
-- **PWA**: `manifest.json` and `service-worker.js` are present and working. Updated `manifest.json` to use clean SVG files.
+- **PWA**: `manifest.json` and `service-worker.js` are robust. Service Worker now caches all critical assets using relative paths for subdirectory compatibility.
 - **i18n**: Framework is in place. Next step is a full audit of all strings (some might still be hardcoded).
 - **Mobile Polish**: The toolbar is getting crowded. A "Settings" menu or "Teacher Tools" section might be needed.
 

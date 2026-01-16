@@ -73,9 +73,15 @@ colormixer/
 
 **Summary**:
 Polished the PWA implementation and verified core game logic.
-- **PWA**: Replaced data URI icons with clean SVG files in `images/icon.svg` and updated `manifest.json`.
-- **Verification**: Added `tests/challenge_test.js` to verify Challenge Mode logic and progression. Verified Contrast Tests pass.
-- **Housekeeping**: Cleaned up `agents.md` by archiving old discussion items.
+- **PWA**:
+    - Updated `service-worker.js` to cache `js/sound.js`, `js/i18n.js`, and `images/icon.svg`.
+    - Converted service worker cache paths to relative paths (`./`) to support subdirectory hosting (e.g., GitHub Pages).
+    - Added Service Worker registration logic to `index.html`.
+    - Added `<link rel="manifest" href="manifest.json" />` to `index.html`.
+- **Verification**:
+    - Verified `tests/challenge_test.js` passes (Challenge Mode Logic).
+    - Verified `tests/contrast_test.js` passes (Accessibility).
+- **Housekeeping**: Confirmed `agents.md` is clean and up to date.
 
 ### 2026-01-09 | OpenAI Codex (GPT-5.2)
 **Task**: Menu space brainstorming
