@@ -1,13 +1,16 @@
 const CACHE_NAME = 'color-mixer-v1';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/css/reset.css',
-  '/css/styles.css',
-  '/css/patterns.css',
-  '/js/state.js',
-  '/js/app.js',
-  '/manifest.json'
+  './',
+  './index.html',
+  './css/reset.css',
+  './css/styles.css',
+  './css/patterns.css',
+  './js/state.js',
+  './js/app.js',
+  './js/sound.js',
+  './js/i18n.js',
+  './images/icon.svg',
+  './manifest.json'
 ];
 
 // Install Event

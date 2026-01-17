@@ -68,6 +68,16 @@ colormixer/
 
 ## Contribution Log
 
+### 2026-01-10 | Jules
+**Task**: PWA Polish & Verification
+
+**Summary**:
+Polished the PWA implementation and verified core game logic.
+- **PWA**: Updated `service-worker.js` to cache missing assets (`sound.js`, `i18n.js`, `icon.svg`) and use relative paths for subdir support.
+- **Assets**: Linked `manifest.json` in `index.html` and added SW registration script.
+- **Verification**: Verified asset existence and contrast ratios. Confirmed Challenge Mode logic via VM testing.
+- **Housekeeping**: Verified `agents.md` was clean (all logs are current Sprint 7).
+
 ### 2026-01-09 | Jules
 **Task**: PWA Polish & Verification
 
@@ -108,7 +118,7 @@ Implemented two teacher-focused tools to enhance classroom utility.
 **Summary**: 
 Implemented a feature allowing students to save and share their achievements.
 - **Functionality**: Created `exportReportCard()` to generate a text-based report of earned badges and stats.
-- **UI**: Added an "Export Report Card" button to the Achievements Modal.
+- **UI**: Added "Export Report Card" button to the Achievements Modal.
 - **Content**: The report includes current progress (badges earned/total), detailed descriptions of unlocked badges, and overall usage stats.
 - **UX**: Provided visual feedback ("Downloaded!") upon successful export.
 
