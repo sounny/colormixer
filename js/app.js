@@ -378,9 +378,7 @@ function showAchievementToast(achievement) {
   setTimeout(() => toast.classList.add('active'), 100);
 
   // Play achievement sound (reusing success sound or a variation)
-  if (isSoundEnabled) {
-    playSuccessSound(); 
-  }
+  playSuccessSound();
 
   // Remove after 4 seconds
   setTimeout(() => {
@@ -529,20 +527,9 @@ function init() {
     highContrastBtn.setAttribute('aria-pressed', 'true');
   }
 
-  // Load saved sound preference
-  const savedSound = localStorage.getItem("soundEnabled");
-  if (savedSound === "false") {
-    isSoundEnabled = false;
-    soundBtn.classList.remove('active');
-    soundBtn.setAttribute('aria-pressed', 'false');
-    soundIcon.innerHTML = `
-      <path d="M11 5L6 9H2v6h4l5 4V5z"/>
-      <line x1="23" y1="9" x2="17" y2="15"/>
-      <line x1="17" y1="9" x2="23" y2="15"/>
-    `;
-  } else {
-    soundBtn.classList.add('active');
-    soundBtn.setAttribute('aria-pressed', 'true');
+  // Initialize Sound Manager
+  if (window.SoundManager) {
+    window.SoundManager.init();
   }
 
   // Load saved challenge level
@@ -1553,7 +1540,7 @@ function exportAnalytics() {
     },
     preferences: {
       language: typeof getCurrentLanguage === 'function' ? getCurrentLanguage() : 'en',
-      soundEnabled: isSoundEnabled,
+      soundEnabled: window.SoundManager ? window.SoundManager.isEnabled : false,
       accessibilityMode: isAccessibilityMode,
       highContrastMode: isHighContrastMode
     }
