@@ -68,6 +68,16 @@ colormixer/
 
 ## Contribution Log
 
+### 2026-01-11 | Jules
+**Task**: Sound System Fix & Refactor
+
+**Summary**:
+Resolved split-brain state bug in sound system and finalized sound architecture.
+- **Refactor**: Unified sound state management into `js/sound.js`. Removed duplicate state in `js/state.js` and manual initialization in `js/app.js`.
+- **Feature**: Added `prefers-reduced-motion` listener to `js/sound.js` to dynamically respect system preferences.
+- **Bug Fix**: Fixed crash due to missing `currentTutorialTarget` variable in `js/state.js`.
+- **Verification**: Added `tests/sound_vm_test.js` to verify state synchronization and logic.
+
 ### 2026-01-10 | Jules
 **Task**: PWA Polish & Verification
 

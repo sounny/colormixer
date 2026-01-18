@@ -26,20 +26,24 @@ window.SoundManager = (function() {
 
     // Check localStorage first
     const savedSound = localStorage.getItem("soundEnabled");
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     if (savedSound !== null) {
       // User has explicit preference
       isSoundEnabled = savedSound === "true";
     } else {
       // No preference saved, check system preference
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      // If user prefers reduced motion, default sound to OFF (less sensory input)
-      // Otherwise default to ON (or whatever the app default was, which seemed to be ON)
-      // Actually, standard practice for auto-play audio is OFF, but for UI feedback it's often ON.
-      // However, the prompt implies "respects prefers-reduced-motion".
-      // I'll default to TRUE unless reduced motion is detected.
-      isSoundEnabled = !prefersReducedMotion;
+      isSoundEnabled = !mediaQuery.matches;
     }
+
+    // Listen for system preference changes
+    mediaQuery.addEventListener('change', (e) => {
+      // Only follow system if user hasn't set an explicit preference
+      if (localStorage.getItem("soundEnabled") === null) {
+        isSoundEnabled = !e.matches;
+        updateUI();
+      }
+    });
 
     updateUI();
   }

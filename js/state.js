@@ -8,7 +8,6 @@ let mode = "RYB"; // 'RYB' = Paint, 'RGB' = Light
 let isChallengeMode = false;
 let isAccessibilityMode = false;
 let isHighContrastMode = false;
-let isSoundEnabled = true;
 let isDemoMode = false;
 let demoInterval = null;
 let isLearnMode = false;
@@ -18,6 +17,10 @@ let challengeWins = 0;
 let totalWins = 0;
 let currentTarget = null; // { name: 'Purple', hex: '...' }
 let colorValue = 100; // 0=Black, 100=Pure, 200=White
+
+// Tutorial State
+let tutorialStep = 0;
+let currentTutorialTarget = null;
 
 // Achievements State
 let unlockedAchievements = JSON.parse(localStorage.getItem('achievements')) || [];
