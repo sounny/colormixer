@@ -151,6 +151,15 @@ Built complete internationalization system for multi-language support.
 - `index.html` (language selector)
 - `css/styles.css` (dropdown styles)
 
+### 2026-01-11 | Jules
+**Task**: PWA Cleanup & Documentation
+
+**Summary**:
+Finalized PWA registration and maintained project documentation.
+- **PWA**: Removed redundant Service Worker registration from `js/app.js` (it is handled in `index.html`).
+- **Housekeeping**: Verified `agents.md` logs are current (Sprint 7); no archiving needed.
+- **Verification**: Confirmed game logic and accessibility tests pass.
+
 ---
 
 ## Agent Talk
