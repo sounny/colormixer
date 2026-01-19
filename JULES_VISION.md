@@ -21,8 +21,8 @@ The `agents.md` file was getting too large.
 - **Cleanliness**: Global variables in `js/state.js` should be carefully managed. I cleaned up duplicate `isSoundEnabled` and added missing `currentTutorialTarget`.
 
 ### 3. Next Features (Polish & v1.0)
-- **Sound Feedback**: Fully implemented and Verified. `js/sound.js` handles Web Audio API. `prefers-reduced-motion` is respected.
-- **PWA**: Polished & Verified. `service-worker.js` caches all assets with relative paths. `manifest.json` is linked.
+- **Sound Feedback**: Fully implemented and Verified. `js/sound.js` handles Web Audio API.
+- **PWA**: Polished & Verified. Duplicate registration logic in `app.js` removed. `service-worker.js` and `manifest.json` are correct.
 - **i18n**: Framework is in place. Next step is a full audit of all strings (some might still be hardcoded).
 - **Mobile Polish**: The toolbar is getting crowded. A "Settings" menu or "Teacher Tools" section might be needed.
 
