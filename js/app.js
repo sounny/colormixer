@@ -1199,6 +1199,38 @@ function closeLangMenuOnClickOutside(e) {
   }
 }
 
+// ==================
+// TOOLS MENU
+// ==================
+
+function toggleToolsMenu() {
+  playPopSound();
+  const menu = document.getElementById('tools-menu');
+  const btn = document.getElementById('tools-toggle-btn');
+  const isVisible = menu.style.display !== 'none';
+
+  menu.style.display = isVisible ? 'none' : 'block';
+  btn.setAttribute('aria-expanded', !isVisible);
+
+  // Close menu when clicking outside
+  if (!isVisible) {
+    setTimeout(() => {
+      document.addEventListener('click', closeToolsMenuOnClickOutside);
+    }, 0);
+  }
+}
+
+function closeToolsMenuOnClickOutside(e) {
+  const menu = document.getElementById('tools-menu');
+  const btn = document.getElementById('tools-toggle-btn');
+
+  if (menu && btn && !menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.style.display = 'none';
+    btn.setAttribute('aria-expanded', 'false');
+    document.removeEventListener('click', closeToolsMenuOnClickOutside);
+  }
+}
+
 // Update UI when language changes
 document.addEventListener('languageChanged', (e) => {
   const lang = e.detail.lang;

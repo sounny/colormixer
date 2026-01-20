@@ -63,10 +63,21 @@ colormixer/
 | ✅ Done | Teacher Analytics Export | Low | Antigravity |
 | ✅ Done | Sound Polish | Low | Jules |
 | ✅ Done | PWA Polish | Low | Jules |
+| ✅ Done | UI Polish (Tools Menu) | Low | Jules |
 
 ---
 
 ## Contribution Log
+
+### 2026-01-12 | Jules
+**Task**: UI Polish & Documentation Cleanup
+
+**Summary**:
+Implemented a "Tools" dropdown menu to reduce toolbar clutter and performed critical documentation housekeeping.
+- **UI**: Grouped "Print", "Export", and "Harmony" buttons into a single "Tools" dropdown menu.
+- **Polish**: Added generic dropdown styles to `css/styles.css` (reusing language menu pattern).
+- **Tests**: Patched `tests/sound_vm_test.js` to fix mock environment issues. Verified contrast ratios pass WCAG AA.
+- **Housekeeping**: Verified `agents.md` is lean and `ARCHIVE.md` contains historical logs.
 
 ### 2026-01-11 | Jules
 **Task**: Sound System Fix & Refactor
