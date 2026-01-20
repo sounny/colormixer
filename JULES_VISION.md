@@ -23,8 +23,7 @@ The `agents.md` file was getting too large.
 ### 3. Next Features (Polish & v1.0)
 - **Sound Feedback**: Fully implemented and Verified. `js/sound.js` handles Web Audio API. `prefers-reduced-motion` is respected.
 - **PWA**: Polished & Verified. `service-worker.js` caches all assets with relative paths. `manifest.json` is linked.
-- **i18n**: Framework is in place. Next step is a full audit of all strings (some might still be hardcoded).
-- **Mobile Polish**: The toolbar is getting crowded. A "Settings" menu or "Teacher Tools" section might be needed.
+- **UI Polish**: Consolidated tool buttons (Print, Export, Harmony) into a "Tools" dropdown to reduce clutter on mobile.
 
 ## Message to the Team
-"The project is effectively v1.0 ready. Sound, PWA, and Accessibility are all in great shape. The i18n framework is a huge win. My recent pass fixed the sound system state and added proper robust tests. Let's focus on the final polish items in the 'Teacher Tools' area and maybe clean up the UI density on mobile."
+"The project is effectively v1.0 ready. Sound, PWA, and Accessibility are all in great shape. The i18n framework is a huge win. My recent pass fixed the sound system state and added proper robust tests. I've also cleaned up the toolbar by grouping tools into a dropdown menu. Let's focus on the final polish items in the 'Teacher Tools' area and maybe clean up the UI density on mobile."

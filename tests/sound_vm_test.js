@@ -35,6 +35,9 @@ const getElementMock = (id) => {
             appendChild: () => {},
             remove: () => {},
             scrollIntoView: () => {},
+            focus: () => {},
+            blur: () => {},
+            click: () => {},
             querySelector: () => null // For successOverlay.querySelector
         };
     }
@@ -83,6 +86,7 @@ const sandbox = {
         location: { search: '' },
         URLSearchParams: class { get() { return null; } },
         navigator: { serviceWorker: { register: () => Promise.resolve() }, clipboard: { writeText: () => Promise.resolve() } },
+        addEventListener: () => {},
         SoundManager: null // Will be set by sound.js
     },
     document: documentMock,
