@@ -68,6 +68,15 @@ colormixer/
 
 ## Contribution Log
 
+### 2026-01-12 | Jules
+**Task**: PWA Polish & Documentation Housekeeping
+
+**Summary**:
+Finalized the PWA implementation and verified all documentation artifacts.
+- **Fix**: Removed duplicate and incorrect Service Worker registration from `js/app.js` (which used an absolute path). `index.html` now handles registration correctly with a relative path.
+- **Verification**: Validated `manifest.json` linkage and relative path correctness via Playwright script (`tests/pwa_verification.py`).
+- **Housekeeping**: Reviewed `agents.md` and `ARCHIVE.md`. Logs are current (Jan 8+) and do not require archiving yet. Verified `tests/challenge_test.js` passes.
+
 ### 2026-01-11 | Jules
 **Task**: Sound System Fix & Refactor
 
