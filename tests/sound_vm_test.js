@@ -35,7 +35,10 @@ const getElementMock = (id) => {
             appendChild: () => {},
             remove: () => {},
             scrollIntoView: () => {},
-            querySelector: () => null // For successOverlay.querySelector
+            querySelector: () => null, // For successOverlay.querySelector
+            focus: () => {},
+            blur: () => {},
+            click: () => {}
         };
     }
     return elementMocks[id];
@@ -76,6 +79,7 @@ const sandbox = {
     window: {
         localStorage: localStorageMock,
         matchMedia: matchMediaMock,
+        addEventListener: () => {},
         AudioContext: audioContextMock,
         webkitAudioContext: audioContextMock,
         document: documentMock,
@@ -137,6 +141,7 @@ assert.strictEqual(sm.isEnabled, true, "Sound should be enabled by default (init
 // Check if soundBtn has 'active' class
 assert.ok(soundBtn.classList.contains('active'), "Sound button should have active class initially");
 assert.strictEqual(soundBtn.attributes['aria-pressed'], 'true', "Sound button should have aria-pressed=true");
+assert.strictEqual(soundBtn.attributes['title'], 'Mute Sound', "Sound button should have title='Mute Sound' when enabled");
 
 // Toggle
 console.log("Toggling sound...");
@@ -147,6 +152,7 @@ assert.strictEqual(localStorageMock.getItem("soundEnabled"), "false", "localStor
 // Verify UI update
 assert.strictEqual(soundBtn.classList.contains('active'), false, "Sound button should NOT have active class after toggle");
 assert.strictEqual(soundBtn.attributes['aria-pressed'], 'false', "Sound button should have aria-pressed=false");
+assert.strictEqual(soundBtn.attributes['title'], 'Enable Sound', "Sound button should have title='Enable Sound' when disabled");
 
 // Toggle back
 sm.toggle();
