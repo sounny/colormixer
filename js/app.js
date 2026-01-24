@@ -1596,11 +1596,4 @@ function exportAnalytics() {
 // ==================
 // SERVICE WORKER REGISTRATION
 // ==================
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then((reg) => console.log('Service worker registered.', reg))
-      .catch((err) => console.log('Service worker registration failed.', err));
-  });
-}
+// Service Worker registration is handled in index.html to ensure relative path resolution.

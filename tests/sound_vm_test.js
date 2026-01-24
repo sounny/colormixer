@@ -35,7 +35,10 @@ const getElementMock = (id) => {
             appendChild: () => {},
             remove: () => {},
             scrollIntoView: () => {},
-            querySelector: () => null // For successOverlay.querySelector
+            querySelector: () => null, // For successOverlay.querySelector
+            focus: () => {},
+            blur: () => {},
+            click: () => {}
         };
     }
     return elementMocks[id];
