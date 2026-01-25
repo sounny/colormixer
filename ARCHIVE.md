@@ -1,5 +1,68 @@
 # Archive - Contribution Log
 
+## 2026-01-09 | Jules
+**Task**: PWA Polish & Verification
+
+**Summary**:
+Polished the PWA implementation and verified core game logic.
+- **PWA**: Replaced data URI icons with clean SVG files in `images/icon.svg` and updated `manifest.json`.
+- **Verification**: Added `tests/challenge_test.js` to verify Challenge Mode logic and progression. Verified Contrast Tests pass.
+- **Housekeeping**: Cleaned up `agents.md` by archiving old discussion items.
+
+## 2026-01-09 | OpenAI Codex (GPT-5.2)
+**Task**: Menu space brainstorming
+
+**Summary**:
+Added UI/UX ideas for reducing the menu footprint and improving density in `agents.md`.
+
+## 2026-01-08 | Jules
+**Task**: Sound System Polish & Housekeeping
+
+**Summary**:
+Completed sound system polish and project housekeeping.
+- **Sound**: Added `playPopSound()` to all toggle interactions (Accessibility, High Contrast, Badges, etc.) for consistent auditory feedback.
+- **Polish**: Updated `SoundManager` to play a confirmation sound when toggled ON.
+- **Housekeeping**: Archived ~200 lines of old logs to `ARCHIVE.md`.
+- **Verification**: Verified accessibility contrast ratios (All passed).
+
+## 2026-01-08 | Antigravity
+**Task**: Print Worksheet & Teacher Analytics Export (Sprint 7)
+
+**Summary**:
+Implemented two teacher-focused tools to enhance classroom utility.
+- **Print Worksheet**: Printable color mixing guide with equations, challenges, and discussion questions
+- **Teacher Analytics Export**: CSV export of student progress, achievements, and preferences
+- **UI**: Added Print and Export buttons to the toolbar
+
+## 2026-01-08 | Gemini CLI Agent
+**Task**: Export Report Card Implementation (Sprint 7)
+
+**Summary**:
+Implemented a feature allowing students to save and share their achievements.
+- **Functionality**: Created `exportReportCard()` to generate a text-based report of earned badges and stats.
+- **UI**: Added "Export Report Card" button to the Achievements Modal.
+- **Content**: The report includes current progress (badges earned/total), detailed descriptions of unlocked badges, and overall usage stats.
+- **UX**: Provided visual feedback ("Downloaded!") upon successful export.
+
+## 2026-01-08 | Antigravity
+**Task**: i18n Framework Setup (Sprint 7)
+
+**Summary**:
+Built complete internationalization system for multi-language support.
+- **Created `js/i18n.js`**: 350+ lines with full translation framework
+- **Languages**: English, Spanish, French (100+ keys each)
+- **Features**: `t()` function, `tColor()` for color names, auto-detect browser language
+- **UI**: Language selector dropdown in header with 🇬🇧🇪🇸🇫🇷 flags
+- **Persistence**: Language preference saved to localStorage
+- **Events**: Custom `languageChanged` event for dynamic updates
+- **Content**: Translated all UI elements, achievements, tutorial, equations
+
+**Files Modified**:
+- `js/i18n.js` (new)
+- `js/app.js` (language menu toggle)
+- `index.html` (language selector)
+- `css/styles.css` (dropdown styles)
+
 ## 2026-01-08 | Jules
 **Task**: Housekeeping & Sound Architecture
 
