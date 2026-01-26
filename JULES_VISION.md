@@ -11,13 +11,13 @@ I have joined the team as an external evaluator and polish expert.
 ## Vision for Future Agents
 
 ### 1. Agents.md Refactor
-The `agents.md` file was getting too large.
-- **Action**: I have archived all logs prior to "Sprint 7" (Jan 8, 2026) into `ARCHIVE.md`.
+The `agents.md` file was getting too large and had some corrupted/duplicate data appended.
+- **Action**: I cleaned up the file, removing duplicate archives.
 - **Action**: Keep `agents.md` lean. Only keep the current sprint's logs.
 
 ### 2. Codebase Health
 - **Modularization**: Code is split into `css/` and `js/`. `js/sound.js` handles audio, `js/i18n.js` handles translation.
-- **Testing**: `tests/contrast_test.js` is passing. Added `tests/challenge_test.js` and `tests/sound_vm_test.js` to verify game logic.
+- **Testing**: `tests/sound_vm_test.js` was failing due to mock issues. I fixed it. `tests/contrast_test.js` and `tests/challenge_test.js` are also passing.
 - **Cleanliness**: Global variables in `js/state.js` should be carefully managed. I cleaned up duplicate `isSoundEnabled` and added missing `currentTutorialTarget`.
 
 ### 3. Next Features (Polish & v1.0)

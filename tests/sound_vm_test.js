@@ -30,6 +30,9 @@ const getElementMock = (id) => {
             textContent: '',
             style: {},
             addEventListener: () => {},
+            focus: () => {},
+            blur: () => {},
+            click: () => {},
             // Methods needed for updateResult
             querySelectorAll: () => [],
             appendChild: () => {},
@@ -79,6 +82,7 @@ const sandbox = {
         AudioContext: audioContextMock,
         webkitAudioContext: audioContextMock,
         document: documentMock,
+        addEventListener: () => {},
         setTimeout: (fn) => fn(),
         location: { search: '' },
         URLSearchParams: class { get() { return null; } },
