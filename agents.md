@@ -69,6 +69,16 @@ colormixer/
 ## Contribution Log
 
 ### 2026-01-11 | Jules
+**Task**: PWA Cleanup & Verification
+
+**Summary**:
+Cleaned up duplicate Service Worker registration and performed comprehensive verification.
+- **PWA**: Removed redundant Service Worker registration from `js/app.js` (it is already handled in `index.html`).
+- **Verification**: Verified Service Worker registration via Playwright. Confirmed contrast ratios (all pass) and Challenge Mode logic (vm tests pass).
+- **Housekeeping**: Audited `agents.md`. Found it clean (176 lines) and containing only current sprint logs (Jan 8+). No archival needed.
+- **Status**: PWA implementation is clean and verified.
+
+### 2026-01-11 | Jules
 **Task**: Sound System Fix & Refactor
 
 **Summary**:
