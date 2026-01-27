@@ -4,6 +4,7 @@
 I have joined the team as an external evaluator and polish expert.
 - **Fixed Bug**: Challenge Mode was broken (win condition never checked). I fixed it by connecting `checkChallenge` to `updateResult`.
 - **Fixed Bug**: Sound system had a split-brain state (two sources of truth). I unified it into `js/sound.js`.
+- **Cleaned Up**: Removed duplicate Service Worker registration in `js/app.js` (now exclusively in `index.html`).
 - **Cleaned Up**: Removed `REFACTOR_updateResult.js` as it was stale code.
 - **Verified**: `agents.md` corruption reported by Antigravity seems resolved.
 - **Phase 3 (Engagement) & Phase 4 (PWA)**: Completed by the team and verified by me.
@@ -22,7 +23,7 @@ The `agents.md` file was getting too large.
 
 ### 3. Next Features (Polish & v1.0)
 - **Sound Feedback**: Fully implemented and Verified. `js/sound.js` handles Web Audio API. `prefers-reduced-motion` is respected.
-- **PWA**: Polished & Verified. `service-worker.js` caches all assets with relative paths. `manifest.json` is linked.
+- **PWA**: Fully Polished & Verified. SW registration is clean, and asset caching works offline.
 - **i18n**: Framework is in place. Next step is a full audit of all strings (some might still be hardcoded).
 - **Mobile Polish**: The toolbar is getting crowded. A "Settings" menu or "Teacher Tools" section might be needed.
 
