@@ -68,6 +68,15 @@ colormixer/
 
 ## Contribution Log
 
+### 2026-01-12 | Jules
+**Task**: PWA & Test Polish
+
+**Summary**:
+Fixed PWA registration redundancy and improved test stability.
+- **PWA**: Removed duplicate and incorrect absolute-path Service Worker registration from `js/app.js` (relying on `index.html`'s relative path version).
+- **Testing**: Fixed `tests/sound_vm_test.js` crash by mocking `focus`, `blur`, and `click` methods.
+- **Verification**: Verified sound logic, challenge logic, and contrast ratios pass.
+
 ### 2026-01-11 | Jules
 **Task**: Sound System Fix & Refactor
 
