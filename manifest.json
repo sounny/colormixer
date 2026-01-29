@@ -3,6 +3,7 @@
   "short_name": "ColorMixer",
   "description": "Interactive educational app demonstrating subtractive (RYB) and additive (RGB) color mixing",
   "start_url": "./index.html",
+  "id": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3b82f6",

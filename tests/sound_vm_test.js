@@ -35,6 +35,9 @@ const getElementMock = (id) => {
             appendChild: () => {},
             remove: () => {},
             scrollIntoView: () => {},
+            focus: () => {},
+            blur: () => {},
+            click: () => {},
             querySelector: () => null // For successOverlay.querySelector
         };
     }
