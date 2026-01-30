@@ -415,6 +415,7 @@ function renderAchievements() {
 }
 
 function exportReportCard() {
+  playPopSound();
   const date = new Date().toLocaleDateString();
   const unlocked = unlockedAchievements.length;
   const total = achievementDefs.length;
@@ -953,6 +954,7 @@ function updateResult() {
 
 // Copy HEX to clipboard
 function copyHex() {
+  playPopSound();
   const hex = currentResultColor.hex;
   navigator.clipboard.writeText(hex).then(() => {
     // Visual feedback
@@ -976,6 +978,7 @@ function copyHex() {
 
 // Share Link
 function shareLink() {
+  playPopSound();
   const baseUrl = window.location.origin + window.location.pathname;
   const params = new URLSearchParams();
   params.set('mode', mode);
