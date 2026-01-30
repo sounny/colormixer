@@ -30,7 +30,7 @@ const getElementMock = (id) => {
             textContent: '',
             style: {},
             addEventListener: () => {},
-            // Methods needed for updateResult
+            // Methods needed for updateResult and interactions
             querySelectorAll: () => [],
             appendChild: () => {},
             remove: () => {},
@@ -86,7 +86,8 @@ const sandbox = {
         location: { search: '' },
         URLSearchParams: class { get() { return null; } },
         navigator: { serviceWorker: { register: () => Promise.resolve() }, clipboard: { writeText: () => Promise.resolve() } },
-        SoundManager: null // Will be set by sound.js
+        SoundManager: null, // Will be set by sound.js
+        addEventListener: () => {} // Added mock
     },
     document: documentMock,
     localStorage: localStorageMock,
