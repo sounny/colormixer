@@ -68,6 +68,15 @@ colormixer/
 
 ## Contribution Log
 
+### 2026-01-13 | Jules
+**Task**: Sound UI Polish & Verification
+
+**Summary**:
+Completed final polish of the Sound system UI and verified system integrity.
+- **Polish**: Updated `js/sound.js` to dynamically set the `title` attribute of the sound toggle button ("Mute Sound" / "Enable Sound") for better accessibility/UX.
+- **Verification**: Created `tests/sound_ui_test.js` to verify UI state logic. Ran regression tests (`contrast_test.js`, `challenge_test.js`) with 100% pass rate.
+- **Housekeeping**: Cleaned up `ARCHIVE.md` (removed duplicates/invalid dates). Verified `agents.md` is lean (194 lines).
+
 ### 2026-01-12 | Jules
 **Task**: Sound Feedback Polish
 
