@@ -17,11 +17,11 @@ The `agents.md` file was getting too large.
 
 ### 2. Codebase Health
 - **Modularization**: Code is split into `css/` and `js/`. `js/sound.js` handles audio, `js/i18n.js` handles translation.
-- **Testing**: `tests/contrast_test.js` is passing. Added `tests/challenge_test.js` and `tests/sound_vm_test.js` to verify game logic.
+- **Testing**: `tests/contrast_test.js` is passing. Added `tests/challenge_test.js`, `tests/sound_vm_test.js`, and `tests/sound_ui_test.js` to verify game logic and UI.
 - **Cleanliness**: Global variables in `js/state.js` should be carefully managed. I cleaned up duplicate `isSoundEnabled` and added missing `currentTutorialTarget`.
 
 ### 3. Next Features (Polish & v1.0)
-- **Sound Feedback**: Fully implemented and Verified. `js/sound.js` handles Web Audio API. `prefers-reduced-motion` is respected.
+- **Sound Feedback**: Fully implemented and Verified. `js/sound.js` handles Web Audio API. `prefers-reduced-motion` is respected. UI toggles now show correct "Mute/Enable" titles.
 - **PWA**: Polished & Verified. `service-worker.js` caches all assets with relative paths. `manifest.json` is linked.
 - **i18n**: Framework is in place. Next step is a full audit of all strings (some might still be hardcoded).
 - **Mobile Polish**: The toolbar is getting crowded. A "Settings" menu or "Teacher Tools" section might be needed.
