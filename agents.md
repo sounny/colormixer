@@ -68,6 +68,15 @@ colormixer/
 
 ## Contribution Log
 
+### 2026-01-13 | Jules
+**Task**: PWA Polish & Housekeeping
+
+**Summary**:
+Finalized PWA implementation and verified codebase integrity.
+- **PWA**: Removed redundant Service Worker registration from `js/app.js` (now handled correctly in `index.html` with relative path). Added `"id": "/"` to `manifest.json` for consistent identity.
+- **Verification**: Verified Challenge Mode logic and basic interaction via Playwright. Confirmed no regressions.
+- **Housekeeping**: Confirmed `agents.md` is clean and up to date for Sprint 7.
+
 ### 2026-01-12 | Jules
 **Task**: Sound Feedback Polish
 
