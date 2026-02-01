@@ -1,4 +1,5 @@
 {
+  "id": "/",
   "name": "Color Mixer",
   "short_name": "ColorMixer",
   "description": "Interactive educational app demonstrating subtractive (RYB) and additive (RGB) color mixing",
