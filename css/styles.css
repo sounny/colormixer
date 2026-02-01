@@ -816,6 +816,69 @@ body.light-mode .challenge-toggle-btn {
   background: rgba(16, 185, 129, 0.1);
 }
 
+/* Settings Toggle Button */
+.settings-toggle-btn {
+  margin-bottom: 1rem;
+  background: #3b82f6;
+  border: 2px solid #3b82f6;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.settings-toggle-btn:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px -1px rgba(0, 0, 0, 0.15);
+}
+
+.settings-toggle-btn:active {
+  transform: translateY(0);
+}
+
+.settings-toggle-btn[aria-expanded="true"] {
+  background: #1e40af;
+  border-color: #1e40af;
+}
+
+body.light-mode .settings-toggle-btn {
+  background: #fbbf24;
+  border-color: #fbbf24;
+  color: #1e293b;
+}
+
+body.light-mode .settings-toggle-btn:hover {
+  background: #f59e0b;
+  border-color: #f59e0b;
+}
+
+body.light-mode .settings-toggle-btn[aria-expanded="true"] {
+  background: #d97706;
+  border-color: #d97706;
+}
+
+/* Settings Menu Container */
+.settings-menu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+  opacity: 0;
+}
+
+.settings-menu.open {
+  max-height: 500px;
+  opacity: 1;
+  display: flex !important;
+}
+
 /* Keyboard Navigation Focus Styles */
 button:focus,
 .color-btn:focus,
