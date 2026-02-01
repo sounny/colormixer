@@ -106,10 +106,41 @@
       </button>
     </div>
 
-    <!-- Toggles Row -->
+    <!-- Settings Menu Toggle Button -->
+    <button
+      class="settings-toggle-btn"
+      id="settings-toggle-btn"
+      onclick="toggleSettingsMenu()"
+      aria-label="Toggle Settings Menu"
+      aria-expanded="false"
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="12" cy="12" r="3" />
+        <path
+          d="M12 1v6m0 6v6m-9-9h6m6 0h6"
+        />
+        <path
+          d="M19.07 4.93l-4.24 4.24m0 5.66l4.24 4.24M4.93 4.93l4.24 4.24m0 5.66l-4.24 4.24"
+        />
+      </svg>
+      <span>Settings</span>
+    </button>
+
+    <!-- Toggles Row (Collapsible) -->
     <div
+      class="settings-menu"
+      id="settings-menu"
       style="
-        display: flex;
+        display: none;
         gap: 0.75rem;
         margin-bottom: 1.5rem;
         flex-wrap: wrap;

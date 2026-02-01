@@ -1597,6 +1597,24 @@ function exportAnalytics() {
 }
 
 // ==================
+// SETTINGS MENU TOGGLE
+// ==================
+
+function toggleSettingsMenu() {
+  playPopSound();
+  const settingsMenu = document.getElementById('settings-menu');
+  const settingsToggleBtn = document.getElementById('settings-toggle-btn');
+  
+  if (settingsMenu.classList.contains('open')) {
+    settingsMenu.classList.remove('open');
+    settingsToggleBtn.setAttribute('aria-expanded', 'false');
+  } else {
+    settingsMenu.classList.add('open');
+    settingsToggleBtn.setAttribute('aria-expanded', 'true');
+  }
+}
+
+// ==================
 // SERVICE WORKER REGISTRATION
 // ==================
 
