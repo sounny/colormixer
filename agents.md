@@ -68,6 +68,15 @@ colormixer/
 
 ## Contribution Log
 
+### 2026-01-13 | Jules
+**Task**: Housekeeping & Polish
+
+**Summary**:
+Cleaned up duplicate Service Worker logic and verified codebase health.
+- **Housekeeping**: Removed redundant Service Worker registration from `js/app.js` (it resides correctly in `index.html` with relative path).
+- **Verification**: Verified `tests/contrast_test.js` passes (WCAG AA compliant).
+- **Verification**: Verified `tests/challenge_test.js` passes.
+
 ### 2026-01-12 | Jules
 **Task**: Sound Feedback Polish
 
