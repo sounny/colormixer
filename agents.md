@@ -69,6 +69,16 @@ colormixer/
 ## Contribution Log
 
 ### 2026-01-12 | Jules
+**Task**: PWA Fix & Test Polish
+
+**Summary**:
+Cleaned up the PWA implementation and improved test robustness.
+- **PWA**: Removed duplicate Service Worker registration from `js/app.js` (conflicted with `index.html` inline script). Verified correct relative path registration via Playwright.
+- **Testing**: Updated `tests/challenge_test.js` to mock `SoundManager.init`, eliminating a console warning during test execution.
+- **Verification**: All tests passed (`contrast_test`, `sound_vm_test`, `challenge_test`).
+- **Housekeeping**: Verified `agents.md` is clean.
+
+### 2026-01-12 | Jules
 **Task**: Sound Feedback Polish
 
 **Summary**:

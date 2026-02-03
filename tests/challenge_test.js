@@ -60,6 +60,7 @@ global.window = {
   navigator: { clipboard: { writeText: () => Promise.resolve() } },
   URLSearchParams: class { get() { return null; } },
   SoundManager: {
+      init: () => {},
       playPop: () => {},
       playSuccess: () => {},
       playAchievement: () => {}
