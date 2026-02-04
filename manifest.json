@@ -1,6 +1,7 @@
 {
   "name": "Color Mixer",
   "short_name": "ColorMixer",
+  "id": "/",
   "description": "Interactive educational app demonstrating subtractive (RYB) and additive (RGB) color mixing",
   "start_url": "./index.html",
   "display": "standalone",

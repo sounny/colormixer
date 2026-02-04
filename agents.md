@@ -68,6 +68,16 @@ colormixer/
 
 ## Contribution Log
 
+### 2026-01-13 | Jules
+**Task**: PWA Finalization & Polish
+
+**Summary**:
+Finalized the Progressive Web App implementation and verified core functionality.
+- **PWA Fix**: Removed duplicate Service Worker registration from `js/app.js` (now handled exclusively in `index.html`).
+- **Manifest**: Updated `manifest.json` to include `"id": "/"` for consistent PWA identity.
+- **Verification**: Verified Service Worker registration, manifest linking, and offline capabilities via automated scripts.
+- **Housekeeping**: Verified `agents.md` is clean and up-to-date.
+
 ### 2026-01-12 | Jules
 **Task**: Sound Feedback Polish
 
