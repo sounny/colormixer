@@ -558,9 +558,11 @@ function init() {
   // Tutorial event listeners
   tutorialNext.addEventListener('click', () => {
     if (isLearnMode) return;
+    playPopSound();
     nextTutorial();
   });
   tutorialSkip.addEventListener('click', () => {
+    playPopSound();
     if (isLearnMode) {
       toggleLearnMode();
       hideTutorial();
@@ -569,6 +571,7 @@ function init() {
     }
   });
   tutorialBackdrop.addEventListener('click', () => {
+    playPopSound();
     if (isLearnMode) {
       toggleLearnMode();
       hideTutorial();
