@@ -68,6 +68,16 @@ colormixer/
 
 ## Contribution Log
 
+### 2026-01-14 | Jules
+**Task**: UI Polish & Code Cleanup
+
+**Summary**:
+Refined the settings menu and improved test hygiene.
+- **UI**: Grouped secondary tools (Harmony, Print, Export) into a collapsible "Tools" submenu to reduce clutter, addressing the "Mobile Polish" vision item.
+- **i18n**: Added translations for the new "Tools" button (EN, ES, FR).
+- **Test Fix**: Resolved a mock warning in `tests/challenge_test.js` by updating the `SoundManager` mock.
+- **Housekeeping**: Verified `agents.md` is clean and up-to-date.
+
 ### 2026-01-13 | Jules
 **Task**: PWA Finalization & Polish
 

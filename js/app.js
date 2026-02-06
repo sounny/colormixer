@@ -1614,3 +1614,19 @@ function toggleSettingsMenu() {
   }
 }
 
+function toggleToolsMenu() {
+  playPopSound();
+  const menu = document.getElementById('tools-menu');
+  const btn = document.getElementById('tools-toggle-btn');
+  const isVisible = menu.style.display !== 'none';
+
+  if (isVisible) {
+    menu.style.display = 'none';
+    btn.classList.remove('active');
+    btn.setAttribute('aria-expanded', 'false');
+  } else {
+    menu.style.display = 'flex';
+    btn.classList.add('active');
+    btn.setAttribute('aria-expanded', 'true');
+  }
+}

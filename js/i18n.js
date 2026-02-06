@@ -44,6 +44,7 @@ const translations = {
     button_skip: "Skip",
     button_share: "Share Link",
     button_copied: "Copied!",
+    button_tools: "Tools",
     
     // Challenge Mode
     challenge_make: "Make",
@@ -142,6 +143,7 @@ const translations = {
     button_skip: "Saltar",
     button_share: "Compartir",
     button_copied: "¡Copiado!",
+    button_tools: "Herramientas",
     
     // Challenge Mode
     challenge_make: "Hacer",
@@ -240,6 +242,7 @@ const translations = {
     button_skip: "Passer",
     button_share: "Partager",
     button_copied: "Copié!",
+    button_tools: "Outils",
     
     // Challenge Mode
     challenge_make: "Créer",
