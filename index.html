@@ -333,13 +333,13 @@
         <span>Badges</span>
       </button>
 
-      <!-- Color Wheel Toggle -->
+      <!-- Tools Toggle -->
       <button
         class="challenge-toggle-btn"
-        id="wheel-toggle-btn"
-        onclick="toggleColorWheel()"
+        id="tools-toggle-btn"
+        onclick="toggleToolsMenu()"
         style="margin-bottom: 1rem"
-        aria-pressed="false"
+        aria-expanded="false"
       >
         <svg
           width="20"
@@ -351,61 +351,98 @@
           stroke-linecap="round"
           stroke-linejoin="round"
         >
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 2a10 10 0 0 1 10 10" />
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
         </svg>
-        <span>Harmony</span>
+        <span data-i18n="button_tools">Tools</span>
       </button>
 
-      <!-- Print Worksheet -->
-      <button
-        class="challenge-toggle-btn"
-        id="print-worksheet-btn"
-        onclick="printWorksheet()"
-        style="margin-bottom: 1rem"
-        aria-label="Print color mixing worksheet"
+      <!-- Tools Menu (Sub-menu) -->
+      <div
+        id="tools-menu"
+        style="
+          display: none;
+          width: 100%;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+          margin-top: 0.5rem;
+          padding-top: 0.75rem;
+          border-top: 1px solid rgba(0, 0, 0, 0.1);
+        "
       >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+        <!-- Color Wheel Toggle -->
+        <button
+          class="challenge-toggle-btn"
+          id="wheel-toggle-btn"
+          onclick="toggleColorWheel()"
+          style="margin-bottom: 1rem"
+          aria-pressed="false"
         >
-          <polyline points="6 9 6 2 18 2 18 9" />
-          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-          <rect x="6" y="14" width="12" height="8" />
-        </svg>
-        <span>Print</span>
-      </button>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 2a10 10 0 0 1 10 10" />
+          </svg>
+          <span>Harmony</span>
+        </button>
 
-      <!-- Export Progress -->
-      <button
-        class="challenge-toggle-btn"
-        id="export-progress-btn"
-        onclick="exportAnalytics()"
-        style="margin-bottom: 1rem"
-        aria-label="Export student progress to CSV"
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+        <!-- Print Worksheet -->
+        <button
+          class="challenge-toggle-btn"
+          id="print-worksheet-btn"
+          onclick="printWorksheet()"
+          style="margin-bottom: 1rem"
+          aria-label="Print color mixing worksheet"
         >
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-          <polyline points="7 10 12 15 17 10" />
-          <line x1="12" y1="15" x2="12" y2="3" />
-        </svg>
-        <span>Export</span>
-      </button>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="6 9 6 2 18 2 18 9" />
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+            <rect x="6" y="14" width="12" height="8" />
+          </svg>
+          <span>Print</span>
+        </button>
+
+        <!-- Export Progress -->
+        <button
+          class="challenge-toggle-btn"
+          id="export-progress-btn"
+          onclick="exportAnalytics()"
+          style="margin-bottom: 1rem"
+          aria-label="Export student progress to CSV"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          <span>Export</span>
+        </button>
+      </div>
     </div>
 
     <!-- Challenge Status Bar -->
